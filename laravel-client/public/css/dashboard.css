@@ -81,3 +81,59 @@ body, html {
 .finish-btn:hover {
     background-color: #c82333;
 }
+
+/* Remove Button Style */
+.remove-btn {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    width: 20px;
+    height: 20px;
+    background-color: red;
+    color: white;
+    border: none;
+    border-radius: 50%;
+    font-size: 14px;
+    font-weight: bold;
+    text-align: center;
+    line-height: 18px;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: background-color 0.3s;
+}
+
+.remove-btn:hover {
+    background-color: darkred;
+}
+
+/* Make Player Header Relative for Positioning */
+#player-row th {
+    position: relative;
+}
+
+
+/* Ensure the header row and the button are aligned */
+.header-row {
+    display: flex;
+    align-items: center; /* Aligns the button with the table headers */
+    margin-bottom: 10px; /* Adds spacing between the button and the table */
+}
+
+/* Style the add button */
+.add-btn {
+    margin-right: 10px; /* Adds spacing between the button and the table */
+    padding: 8px 12px;
+    font-size: 1rem;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    background-color: #4CAF50;
+    color: white;
+    transition: background-color 0.3s;
+}
+
+.add-btn:hover {
+    background-color: #45a049;
+}

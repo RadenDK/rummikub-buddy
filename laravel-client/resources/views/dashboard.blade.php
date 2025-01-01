@@ -19,39 +19,30 @@
 
         <!-- Players Table -->
         <div class="players-container">
+            <!-- Row containing the button and table -->
+            <div class="header-row">
+                <!-- Add Player Button -->
+                <button id="add-player-btn" class="add-btn">+</button>
+            </div>
             <table id="score-table">
                 <thead>
                     <tr id="player-row">
                         <th>#</th>
-                        <th>Player 1</th>
-                        <th>Player 2</th>
-                        <th>Player 3</th>
-                        <th>Player 4</th>
-                        <th class="add-player-cell">
-                            <button id="add-player-btn" class="add-btn">+</button>
-                        </th>
+                        <!-- Dynamic players will be added here -->
                     </tr>
                 </thead>
                 <tbody id="rounds-body">
-                    <td contenteditable="true">1</td> <!-- Round 1 -->
-                    <td contenteditable="true">0</td> <!-- Player 1 initial round 1 score -->
-                    <td contenteditable="true">0</td> <!-- Player 2 initial round 1 score -->
-                    <td contenteditable="true">0</td> <!-- Player 3 initial round 1 score -->
-                    <td contenteditable="true">0</td> <!-- Player 4 initial round 1 score -->
                     <!-- Dynamic rounds will be added here -->
                 </tbody>
                 <tfoot>
                     <tr id="totals-row">
                         <th>Total</th>
-                        <!-- Total values will dynamically be updated in js -->
-                        <td>0</td> <!-- Player 1 initial total -->
-                        <td>0</td> <!-- Player 2 initial total -->
-                        <td>0</td> <!-- Player 3 initial total -->
-                        <td>0</td> <!-- Player 4 initial total -->
+                        <!-- Dynamic total scores will be added here -->
                     </tr>
                 </tfoot>
             </table>
         </div>
+
 
         <!-- Add Round Button -->
         <button id="add-round-btn" class="add-btn">Add Round</button>
