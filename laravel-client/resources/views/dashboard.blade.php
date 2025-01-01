@@ -53,7 +53,7 @@
         </div>
     </div>
     <!-- Link to JS -->
-    <script src="{{ asset('js/dashboard.js') }}"></script>
+    <script type="module" src="{{ asset('js/main.js') }}"></script>
 </body>
 
 </html>
