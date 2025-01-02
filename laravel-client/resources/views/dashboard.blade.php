@@ -19,7 +19,7 @@
     <div class="dashboard-container">
         <!-- Profile Icon -->
         <div class="profile-icon">
-            <img src="/images/profile-icon.png" alt="Profile Icon" class="icon">
+            <img src="{{ session('google_user')['avatar'] }}" alt="Profile Icon" class="profile-img">
         </div>
 
         <!-- Players Table -->
