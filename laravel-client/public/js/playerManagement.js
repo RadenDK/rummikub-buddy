@@ -91,13 +91,11 @@ export function enableAddPlayerButton() {
  * Removes the "Add Player" button and all "Remove Player" buttons from the table.
  */
 export function removePlayerEditButtons() {
-    // Remove the "Add Player" button
     const addPlayerButton = document.getElementById('add-player-btn');
     if (addPlayerButton) {
-        addPlayerButton.parentElement.remove(); // Remove the button's container
+        addPlayerButton.parentElement.remove();
     }
 
-    // Remove all "Remove Player" buttons
     const removeButtons = document.querySelectorAll('.remove-btn');
-    removeButtons.forEach(button => button.remove());
+    removeButtons.forEach((button) => button.remove());
 }

@@ -8,6 +8,11 @@
     <title>Rummikub Manager</title>
     <!-- Link to CSS -->
     <link rel="stylesheet" href="{{ asset('css/dashboard.css') }}">
+
+    <!-- import sortable from CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.0/Sortable.min.js"></script>
+
+
 </head>
 
 <body>
@@ -27,7 +32,7 @@
             <table id="score-table">
                 <thead>
                     <tr id="player-row">
-                        <th>#</th>
+                        <th id="static-header">#</th>
                         <!-- Dynamic players will be added here -->
                     </tr>
                 </thead>

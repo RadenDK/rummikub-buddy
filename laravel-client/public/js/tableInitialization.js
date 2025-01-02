@@ -1,5 +1,6 @@
 import { addPlayer } from './playerManagement.js';
 import { addNewRoundRow } from './roundManagement.js';
+import { initializeColumnDragging } from './playerDragable.js'
 
 /**
  * Initializes the game table with the specified number of players and the first round.
@@ -14,6 +15,9 @@ export function initializeTable(initialPlayerCount = 4) {
     for (let i = 1; i <= initialPlayerCount; i++) {
         addPlayer();
     }
+
+    // make it so that player columns are dragable
+    initializeColumnDragging();
 }
 
 /**
