@@ -185,3 +185,10 @@ body, html {
     background-color: #f44336;
     color: white;
 }
+
+
+.disabled {
+    background-color: #ccc;
+    cursor: not-allowed;
+    opacity: 0.6;
+}

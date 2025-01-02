@@ -1,3 +1,5 @@
+import { enableAddRoundButton } from './roundManagement.js';
+
 /**
  * Handles changes to a score cell.
  */
@@ -68,5 +70,8 @@ export function calculateWinnerScore(row) {
 
         const columnIndex = zeroValueCell.cellIndex;
         updateColumnTotal(columnIndex);
+
+        // enable the add round button since now all player scores have been filled out
+        enableAddRoundButton()
     }
 }

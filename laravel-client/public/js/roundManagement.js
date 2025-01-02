@@ -1,6 +1,8 @@
 import { removePlayerEditButtons } from './playerManagement.js';
 import { handleScoreChange } from './scoreCalculation.js';
 
+
+
 /**
  * Adds a new round to the table.
  */
@@ -25,6 +27,9 @@ export function addNewRoundRow() {
     if (nextRoundCount > 1) {
         removePlayerEditButtons();
     }
+
+    // Disable the Add Round button after adding a new round
+    disableAddRoundButton();
 }
 
 /**
@@ -36,4 +41,22 @@ export function createNewRoundScoreCell() {
     scoreCell.setAttribute('contenteditable', 'true');
     scoreCell.addEventListener('focusout', handleScoreChange);
     return scoreCell;
+}
+
+// Helper function to disable the Add Round button
+function disableAddRoundButton() {
+    const addRoundButton = document.getElementById('add-round-btn');
+    if (addRoundButton) {
+        addRoundButton.disabled = true;
+        addRoundButton.classList.add('disabled'); // Optional: Add a CSS class to style the disabled state
+    }
+}
+
+// Helper function to enable the Add Round button
+export function enableAddRoundButton() {
+    const addRoundButton = document.getElementById('add-round-btn');
+    if (addRoundButton) {
+        addRoundButton.disabled = false;
+        addRoundButton.classList.remove('disabled'); // Optional: Remove the CSS class
+    }
 }
