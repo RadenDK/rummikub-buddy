@@ -43,7 +43,6 @@
             </table>
         </div>
 
-
         <!-- Add Round Button -->
         <button id="add-round-btn" class="add-btn">Add Round</button>
 
@@ -52,6 +51,19 @@
             <button id="finish-game-btn" class="finish-btn">Finish Game</button>
         </div>
     </div>
+
+    <!-- Modal Window -->
+    <div id="finish-game-modal" class="modal">
+        <div class="modal-content">
+            <h2>Finish Game</h2>
+            <p>Are you sure you want to finish this game?</p>
+            <div class="modal-buttons">
+                <button id="save-game-btn" class="modal-btn save-btn">Save Game</button>
+                <button id="abort-game-btn" class="modal-btn abort-btn">Abort Game</button>
+            </div>
+        </div>
+    </div>
+
     <!-- Link to JS -->
     <script type="module" src="{{ asset('js/main.js') }}"></script>
 </body>
