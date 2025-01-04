@@ -11,8 +11,12 @@ export function initializeTable(initialPlayerCount = 4) {
     // Add the first round to the table
     addNewRoundRow();
 
+
+    const firstName = googleUserName.split(' ')[0]; // Extracts the first name from the Google user name
+    addPlayer(firstName, true); // Add the first player to the table and set it to the main player
+
     // Add the specified number of players to the table
-    for (let i = 1; i <= initialPlayerCount; i++) {
+    for (let i = 2; i <= initialPlayerCount; i++) {
         addPlayer();
     }
 

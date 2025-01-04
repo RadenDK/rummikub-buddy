@@ -73,4 +73,10 @@
     <script type="module" src="{{ asset('js/main.js') }}"></script>
 </body>
 
+<script>
+    const googleUserName = {!! json_encode(session('google_user')['name'] ?? null) !!};
+</script>
+
+
+
 </html>

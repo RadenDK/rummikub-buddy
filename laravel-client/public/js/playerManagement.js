@@ -3,7 +3,7 @@ import { createNewRoundScoreCell } from './roundManagement.js';
 /**
  * Adds a new player to the table.
  */
-export function addPlayer() {
+export function addPlayer(playerName = null, mainPlayer = false) {
     const roundsBody = document.getElementById('rounds-body');
     const totalsRow = document.getElementById('totals-row');
 
@@ -11,7 +11,13 @@ export function addPlayer() {
     const playerCount = playerRow.children.length - 1; // Exclude the # column
     const newPlayerNumber = playerCount + 1;
 
-    addPlayerHeader(`Player ${newPlayerNumber}`);
+
+    // if no input is given, use the default player name
+    if (playerName === null) {
+        playerName = `Player ${newPlayerNumber}`;
+    }
+
+    addPlayerHeader(playerName, mainPlayer);
 
     for (let row of roundsBody.rows) {
         const newCell = createNewRoundScoreCell();
@@ -30,7 +36,7 @@ export function addPlayer() {
 /**
  * Creates a new player header.
  */
-export function addPlayerHeader(playerName) {
+export function addPlayerHeader(playerName, mainPlayer = false) {
     const playerRow = document.getElementById('player-row');
     const playerHeader = document.createElement('th');
 
@@ -38,11 +44,14 @@ export function addPlayerHeader(playerName) {
     nameSpan.textContent = playerName;
     playerHeader.appendChild(nameSpan);
 
-    const removeButton = document.createElement('button');
-    removeButton.textContent = '-';
-    removeButton.className = 'remove-btn';
-    removeButton.addEventListener('click', () => removePlayer(playerHeader));
-    playerHeader.appendChild(removeButton);
+    // If not the main player, add a remove button
+    if (!mainPlayer) {
+        const removeButton = document.createElement('button');
+        removeButton.textContent = '-';
+        removeButton.className = 'remove-btn';
+        removeButton.addEventListener('click', () => removePlayer(playerHeader));
+        playerHeader.appendChild(removeButton);
+    }
 
     playerRow.appendChild(playerHeader);
 }
