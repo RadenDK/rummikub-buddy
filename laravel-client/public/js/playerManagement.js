@@ -40,9 +40,14 @@ export function addPlayerHeader(playerName, mainPlayer = false) {
     const playerRow = document.getElementById('player-row');
     const playerHeader = document.createElement('th');
 
-    const nameSpan = document.createElement('span');
-    nameSpan.textContent = playerName;
-    playerHeader.appendChild(nameSpan);
+    const nameInput = document.createElement('input');
+    nameInput.type = 'text';
+    nameInput.value = playerName;
+    nameInput.className = 'player-name-input';
+    if (mainPlayer) {
+        nameInput.disabled = true;
+    }
+    playerHeader.appendChild(nameInput);
 
     // If not the main player, add a remove button
     if (!mainPlayer) {
