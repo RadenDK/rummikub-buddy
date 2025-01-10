@@ -1,33 +1,57 @@
 import { addPlayer } from './playerManagement.js';
-import { addNewRoundRow } from './roundManagement.js';
+import { createNewRoundRow, addNewRound } from './roundManagement.js';
 import { initializeColumnDragging } from './playerDragable.js'
+import { updateAllColumnTotals } from './scoreCalculation.js';
 
 /**
- * Initializes the game table with the specified number of players and the first round.
+ * Initializes the game table based on the provided game state.
+ * If no game state is provided, initializes a default table with four players and no rounds.
  * 
- * @param {number} initialPlayerCount - The number of players to initialize the game with.
+ * @param {Object|null} gameState - The game state containing players and rounds, or null.
+ * The gameState object should have the following structure:
+ * {
+ *   players: [{ name: "Player 1", isMain: true }, { name: "Player 2", isMain: false }, ...],
+ *   rounds: [[10, -10, 0], [5, -5, 0]] // Each sub-array represents a round's scores
+ * }
  */
-export function initializeTable(initialPlayerCount = 4) {
-    // Add the first round to the table
-    addNewRoundRow();
+export function initializeTable(gameState = null) {
+    if (gameState) {
+        // If a game state is provided, initialize with the saved players and rounds
+        const { players, rounds } = gameState;
 
+        // Step 1: Add players
+        players.forEach((player, index) => {
+            const isMainPlayer = player.isMain || false; // Check if the player is the main player
+            addPlayer(player.name, isMainPlayer);
+        });
 
-    const firstName = googleUserName.split(' ')[0]; // Extracts the first name from the Google user name
-    addPlayer(firstName, true); // Add the first player to the table and set it to the main player
+        // Step 2: Add existing rounds
+        rounds.forEach(round => {
+            createNewRoundRow(round); // Refactor `addNewRoundRow` to accept scores for the round
+        });
+        updateAllColumnTotals(); // Update the column totals after loading the game state
+    } else {
+        // If no game state is provided, initialize with default players and no rounds
 
-    // Add the specified number of players to the table
-    for (let i = 2; i <= initialPlayerCount; i++) {
-        addPlayer();
+        // Step 1: Add default players
+        const defaultPlayers = [googleUserName, 'Player 2', 'Player 3', 'Player 4'];
+        defaultPlayers.forEach((playerName, index) => {
+            addPlayer(playerName, index === 0); // Set the first player as the main player
+        });
+
+        // Step 2: Add an empty round (optional, depending on your logic)
+        createNewRoundRow(); // Refactor `addNewRoundRow` to handle no scores passed
     }
 
-    // make it so that player columns are dragable
+    // Step 3: Make player columns draggable
     initializeColumnDragging();
 }
+
 
 /**
  * Adds event listeners to DOM elements after the page has loaded.
  */
 export function setupEventListeners() {
-    document.getElementById('add-round-btn').addEventListener('click', addNewRoundRow);
+    document.getElementById('add-round-btn').addEventListener('click', addNewRound);
     document.getElementById('add-player-btn').addEventListener('click', addPlayer);
 }

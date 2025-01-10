@@ -35,17 +35,28 @@ export function addPlayer(playerName = null, mainPlayer = false) {
 
 /**
  * Creates a new player header.
+ * 
+ * @param {string} playerName - The name of the player.
+ * @param {boolean} mainPlayer - Whether this player is the main player.
  */
 export function addPlayerHeader(playerName, mainPlayer = false) {
     const playerRow = document.getElementById('player-row');
     const playerHeader = document.createElement('th');
 
+    // Add a data attribute to indicate if this is the main player
+    if (mainPlayer) {
+        playerHeader.setAttribute('data-main-player', 'true');
+    } else {
+        playerHeader.setAttribute('data-main-player', 'false');
+    }
+
+    // Create an input for the player's name
     const nameInput = document.createElement('input');
     nameInput.type = 'text';
     nameInput.value = playerName;
     nameInput.className = 'player-name-input';
     if (mainPlayer) {
-        nameInput.disabled = true;
+        nameInput.disabled = true; // Disable editing for the main player
     }
     playerHeader.appendChild(nameInput);
 
@@ -60,6 +71,7 @@ export function addPlayerHeader(playerName, mainPlayer = false) {
 
     playerRow.appendChild(playerHeader);
 }
+
 
 /**
  * Removes a player from the table.
