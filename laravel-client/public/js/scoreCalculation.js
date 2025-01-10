@@ -50,10 +50,10 @@ export function updateAllColumnTotals() {
     // The #player-row has all <th> columns, including the first one (#).
     // We want to skip the first <th>.
     const playerRow = document.getElementById('player-row');
-    const totalColumns = playerRow.querySelectorAll('th').length - 1;  
+    const totalColumns = playerRow.querySelectorAll('th').length - 1;
     // Example: if you have 4 players, totalColumns will be 4
     // Those columns will be indexed 1..4 in each row (index 0 is the “Round #”).
-    
+
     for (let columnIndex = 1; columnIndex <= totalColumns; columnIndex++) {
         updateColumnTotal(columnIndex);
     }

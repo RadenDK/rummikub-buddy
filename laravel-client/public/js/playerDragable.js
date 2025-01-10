@@ -1,3 +1,6 @@
+import { saveGameStateToLocalStorage } from './gameState.js';
+
+
 /**
  * Adds drag-and-drop functionality to the player columns.
  */
@@ -57,6 +60,9 @@ export function initializeColumnDragging() {
 
             totalsRow.innerHTML = '';
             totalsCells.forEach((cell) => totalsRow.appendChild(cell));
+
+            // Call saveGameStateToLocalStorage after reordering
+            saveGameStateToLocalStorage();
         },
     });
 }
