@@ -1,7 +1,6 @@
 import { enableAddRoundButton } from './roundManagement.js';
 import { saveGameStateToLocalStorage } from './gameState.js';
 
-
 /**
  * Handles changes to a score cell.
  */
@@ -13,15 +12,47 @@ export function handleScoreChange(event) {
     const rawValue = changedCell.textContent.trim();
     const numericValue = parseInt(rawValue, 10);
 
+    if (isWinnerCell(changedCell)) {
+        // Do nothing if this is the winner cell
+        return;
+    }
+
     if (isNaN(numericValue)) {
         changedCell.textContent = '0';
-    } else if (numericValue > 0) {
-        changedCell.textContent = `-${numericValue}`;
+        clearCellAttributes(changedCell);
+    } else {
+        // Automatically make the score negative for losers
+        changedCell.textContent = numericValue > 0 ? `-${numericValue}` : numericValue;
+        markAsLoserCell(changedCell);
     }
 
     updateColumnTotal(columnIndex);
     calculateWinnerScore(row);
     saveGameStateToLocalStorage();
+}
+
+/**
+ * Checks if a cell is marked as a winner.
+ */
+function isWinnerCell(cell) {
+    return cell.getAttribute('data-winner') === 'true';
+}
+
+/**
+ * Marks a cell as a loser for styling purposes.
+ */
+function markAsLoserCell(cell) {
+    cell.setAttribute('data-loser', 'true');
+    cell.classList.add('loser-cell');
+}
+
+/**
+ * Clears the winner or loser attributes and styles for a cell.
+ */
+function clearCellAttributes(cell) {
+    cell.removeAttribute('data-winner');
+    cell.removeAttribute('data-loser');
+    cell.classList.remove('winner-cell', 'loser-cell');
 }
 
 /**
@@ -47,77 +78,59 @@ export function updateColumnTotal(columnIndex) {
  * Updates the total for every player column.
  */
 export function updateAllColumnTotals() {
-    // The #player-row has all <th> columns, including the first one (#).
-    // We want to skip the first <th>.
     const playerRow = document.getElementById('player-row');
     const totalColumns = playerRow.querySelectorAll('th').length - 1;
-    // Example: if you have 4 players, totalColumns will be 4
-    // Those columns will be indexed 1..4 in each row (index 0 is the “Round #”).
 
     for (let columnIndex = 1; columnIndex <= totalColumns; columnIndex++) {
         updateColumnTotal(columnIndex);
     }
 }
 
-
 /**
  * Calculates and sets the missing score for a row.
  */
 export function calculateWinnerScore(row) {
-    const cells = Array.from(row.cells).slice(1);
+    const cells = Array.from(row.cells).slice(1); // Skip the first cell (round number)
     let totalRowScore = 0;
-    let zeroValueCell = null;
+    let winnerCell = null;
     let zeroCount = 0;
 
     for (let cell of cells) {
         const cellValue = parseInt(cell.textContent, 10);
+        clearCellAttributes(cell); // Clear any previous winner/loser status
 
-        if (!isNaN(cellValue) && cellValue !== 0) {
+        if (isNaN(cellValue)) {
+            continue;
+        }
+
+        if (cellValue > 0) {
+            if (winnerCell) {
+                winnerCell = null;
+                break;
+            }
+            winnerCell = cell;
+        } else if (cellValue < 0) {
             totalRowScore += cellValue;
+            markAsLoserCell(cell);
         } else if (cellValue === 0) {
             zeroCount++;
             if (zeroCount === 1) {
-                zeroValueCell = cell;
-            } else {
-                zeroValueCell = null;
-                break;
+                winnerCell = cell;
             }
         }
     }
 
-    if (zeroValueCell) {
-        zeroValueCell.textContent = -totalRowScore;
+    if (zeroCount > 1) {
+        winnerCell = null;
+    }
 
-        const columnIndex = zeroValueCell.cellIndex;
+    if (winnerCell) {
+        winnerCell.textContent = -totalRowScore;
+        winnerCell.setAttribute('data-winner', 'true');
+        winnerCell.classList.add('winner-cell');
+
+        const columnIndex = winnerCell.cellIndex;
         updateColumnTotal(columnIndex);
-
-        // enable the add round button since now all player scores have been filled out
-        enableAddRoundButton()
+        enableAddRoundButton();
     }
-}
-
-
-/**
- * Checks if the current round row is ready for a new round.
- * If any cell in the current round row contains a 0, it returns false.
- * Otherwise, it returns true.
- * 
- * @returns {boolean} - True if ready for a new round, false otherwise.
- */
-export function readyForANewRound() {
-    const roundsBody = document.getElementById('rounds-body');
-    const lastRoundRow = roundsBody.rows[roundsBody.rows.length - 1];
-
-    if (!lastRoundRow) {
-        return true; // No rounds present, ready for a new round
-    }
-
-    const cells = Array.from(lastRoundRow.cells).slice(1); // Skip the round number cell
-    for (let cell of cells) {
-        if (parseInt(cell.textContent.trim(), 10) === 0) {
-            return false;
-        }
-    }
-
-    return true;
 }
