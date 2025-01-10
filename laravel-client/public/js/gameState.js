@@ -39,3 +39,9 @@ export function loadGameStateFromLocalStorage() {
     console.log('Game state loaded:', gameState); // Debugging log
     return gameState;
 }
+
+// Function to clear the game state from local storage
+export function clearGameStateFromLocalStorage() {
+    localStorage.removeItem('gameState');
+    console.log('Game state cleared.');
+}

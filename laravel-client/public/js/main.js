@@ -1,5 +1,5 @@
 import { initializeTable, setupEventListeners } from './tableInitialization.js';
-import { initializeModalWindow } from './modalWindow.js';
+import { initializeModalWindow } from './finishGameModalWindow.js';
 import { loadGameStateFromLocalStorage } from './gameState.js';
 
 document.addEventListener('DOMContentLoaded', () => {

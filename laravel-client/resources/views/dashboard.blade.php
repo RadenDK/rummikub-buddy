@@ -63,8 +63,8 @@
             <h2>Finish Game</h2>
             <p>Are you sure you want to finish this game?</p>
             <div class="modal-buttons">
-                <button id="save-game-btn" class="modal-btn save-btn">Save Game</button>
                 <button id="abort-game-btn" class="modal-btn abort-btn">Abort Game</button>
+                <button id="save-game-btn" class="modal-btn save-btn">Save Game</button>
             </div>
         </div>
     </div>

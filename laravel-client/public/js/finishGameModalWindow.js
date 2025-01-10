@@ -1,3 +1,5 @@
+import { clearGameStateFromLocalStorage } from './gameState.js';
+
 export function initializeModalWindow() {
     // Get modal and buttons
     const finishGameBtn = document.getElementById('finish-game-btn');
@@ -20,7 +22,9 @@ export function initializeModalWindow() {
     // Abort game action
     abortGameBtn.addEventListener('click', () => {
         console.log('Game aborted!');
+        clearGameStateFromLocalStorage();
         finishGameModal.style.display = 'none';
+        location.reload(); // Reload the DOM
     });
 
     // Optional: Close modal when clicking outside of it
