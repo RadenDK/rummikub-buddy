@@ -58,6 +58,16 @@ export function addPlayerHeader(playerName, mainPlayer = false) {
     if (mainPlayer) {
         nameInput.disabled = true; // Disable editing for the main player
     }
+
+    // Add keydown event listener for Enter key
+    nameInput.addEventListener('keydown', (event) => {
+        if (event.key === 'Enter') {
+            event.preventDefault(); // Prevent default Enter behavior
+            const nextElement = getNextFocusableElement(nameInput);
+            nextElement?.focus(); // Focus on the next focusable element, if any
+        }
+    });
+
     playerHeader.appendChild(nameInput);
 
     // If not the main player, add a remove button
@@ -71,6 +81,24 @@ export function addPlayerHeader(playerName, mainPlayer = false) {
 
     playerRow.appendChild(playerHeader);
 }
+
+/**
+ * Finds the next focusable element in the DOM after the given element.
+ * 
+ * @param {HTMLElement} currentElement - The current element.
+ * @returns {HTMLElement|null} - The next focusable element or null if none exists.
+ */
+function getNextFocusableElement(currentElement) {
+    const focusableSelectors = 'input, button, [contenteditable="true"], select, textarea, a[href]';
+    const allFocusable = Array.from(document.querySelectorAll(focusableSelectors));
+    const currentIndex = allFocusable.indexOf(currentElement);
+
+    if (currentIndex >= 0 && currentIndex < allFocusable.length - 1) {
+        return allFocusable[currentIndex + 1];
+    }
+    return null;
+}
+
 
 
 /**

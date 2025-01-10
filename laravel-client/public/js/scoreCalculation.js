@@ -95,3 +95,29 @@ export function calculateWinnerScore(row) {
         enableAddRoundButton()
     }
 }
+
+
+/**
+ * Checks if the current round row is ready for a new round.
+ * If any cell in the current round row contains a 0, it returns false.
+ * Otherwise, it returns true.
+ * 
+ * @returns {boolean} - True if ready for a new round, false otherwise.
+ */
+export function readyForANewRound() {
+    const roundsBody = document.getElementById('rounds-body');
+    const lastRoundRow = roundsBody.rows[roundsBody.rows.length - 1];
+
+    if (!lastRoundRow) {
+        return true; // No rounds present, ready for a new round
+    }
+
+    const cells = Array.from(lastRoundRow.cells).slice(1); // Skip the round number cell
+    for (let cell of cells) {
+        if (parseInt(cell.textContent.trim(), 10) === 0) {
+            return false;
+        }
+    }
+
+    return true;
+}

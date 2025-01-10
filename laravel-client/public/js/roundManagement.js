@@ -66,11 +66,42 @@ export function createNewRoundScoreCell(score = 0) {
     scoreCell.textContent = score; // Set the initial score value
     scoreCell.setAttribute('contenteditable', 'true'); // Allow the user to edit the score
     scoreCell.addEventListener('focusout', handleScoreChange); // Attach the score change handler
+
+    // Add keydown event listener for Enter key behavior
+    scoreCell.addEventListener('keydown', (event) => {
+        if (event.key === 'Enter') {
+            event.preventDefault(); // Prevent the default Enter behavior (line break)
+            // Simulate a Tab key press by moving focus to the next focusable element
+            const nextElement = getNextFocusableElement(scoreCell);
+            nextElement?.focus(); // Focus the next element, if it exists
+        }
+    });
+    
+
     return scoreCell;
 }
 
+/**
+ * Finds the next focusable element in the DOM after the given element.
+ * 
+ * @param {HTMLElement} currentElement - The current element.
+ * @returns {HTMLElement|null} - The next focusable element or null if none exists.
+ */
+function getNextFocusableElement(currentElement) {
+    const focusableSelectors = 'input, button, [contenteditable="true"], select, textarea, a[href]';
+    const allFocusable = Array.from(document.querySelectorAll(focusableSelectors));
+    const currentIndex = allFocusable.indexOf(currentElement);
+
+    if (currentIndex >= 0 && currentIndex < allFocusable.length - 1) {
+        return allFocusable[currentIndex + 1];
+    }
+    return null;
+}
+
+
+
 // Helper function to disable the Add Round button
-function disableAddRoundButton() {
+export function disableAddRoundButton() {
     const addRoundButton = document.getElementById('add-round-btn');
     if (addRoundButton) {
         addRoundButton.disabled = true;
@@ -85,4 +116,30 @@ export function enableAddRoundButton() {
         addRoundButton.disabled = false;
         addRoundButton.classList.remove('disabled'); // Optional: Remove the CSS class
     }
+}
+
+
+/**
+ * Checks if the current round row is ready for a new round.
+ * If any cell in the current round row contains a 0, it returns false.
+ * Otherwise, it returns true.
+ * 
+ * @returns {boolean} - True if ready for a new round, false otherwise.
+ */
+export function readyForANewRound() {
+    const roundsBody = document.getElementById('rounds-body');
+    const lastRoundRow = roundsBody.rows[roundsBody.rows.length - 1];
+
+    if (!lastRoundRow) {
+        return true; // No rounds present, ready for a new round
+    }
+
+    const cells = Array.from(lastRoundRow.cells).slice(1); // Skip the round number cell
+    for (let cell of cells) {
+        if (parseInt(cell.textContent.trim(), 10) === 0) {
+            return false;
+        }
+    }
+
+    return true;
 }

@@ -1,5 +1,5 @@
 import { addPlayer } from './playerManagement.js';
-import { createNewRoundRow, addNewRound } from './roundManagement.js';
+import { createNewRoundRow, addNewRound, readyForANewRound, enableAddRoundButton, disableAddRoundButton } from './roundManagement.js';
 import { initializeColumnDragging } from './playerDragable.js'
 import { updateAllColumnTotals } from './scoreCalculation.js';
 
@@ -29,6 +29,7 @@ export function initializeTable(gameState = null) {
         rounds.forEach(round => {
             createNewRoundRow(round); // Refactor `addNewRoundRow` to accept scores for the round
         });
+
         updateAllColumnTotals(); // Update the column totals after loading the game state
     } else {
         // If no game state is provided, initialize with default players and no rounds
@@ -41,6 +42,12 @@ export function initializeTable(gameState = null) {
 
         // Step 2: Add an empty round (optional, depending on your logic)
         createNewRoundRow(); // Refactor `addNewRoundRow` to handle no scores passed
+    }
+
+    if (readyForANewRound()) {
+        enableAddRoundButton();
+    } else {
+        disableAddRoundButton();
     }
 
     // Step 3: Make player columns draggable
