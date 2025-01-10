@@ -35,7 +35,7 @@ export function initializeTable(gameState = null) {
         // If no game state is provided, initialize with default players and no rounds
 
         // Step 1: Add default players
-        const defaultPlayers = [googleUserName, 'Player 2', 'Player 3', 'Player 4'];
+        const defaultPlayers = [googleFirstName, 'Player 2', 'Player 3', 'Player 4'];
         defaultPlayers.forEach((playerName, index) => {
             addPlayer(playerName, index === 0); // Set the first player as the main player
         });

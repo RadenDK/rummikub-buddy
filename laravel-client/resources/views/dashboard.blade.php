@@ -74,7 +74,8 @@
 </body>
 
 <script>
-    const googleUserName = {!! json_encode(session('google_user')['name'] ?? null) !!};
+    const googleFullName = {!! json_encode(session('google_user')['name'] ?? null) !!};
+    const googleFirstName = googleFullName ? googleFullName.split(' ')[0] : null;
 </script>
 
 
