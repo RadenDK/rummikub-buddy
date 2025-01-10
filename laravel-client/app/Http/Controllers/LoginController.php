@@ -20,13 +20,13 @@ class LoginController extends Controller
     }
 
     public function showLoginForm(Request $request)
-{
-    // Clear the session
-    $request->session()->forget('google_user');
+    {
+        // Clear the session
+        $request->session()->forget('google_user');
 
-    // Show the login view
-    return view('login');
-}
+        // Show the login view
+        return view('login');
+    }
 
 
     // Redirect to Google's OAuth page
