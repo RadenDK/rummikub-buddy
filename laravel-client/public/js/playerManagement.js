@@ -1,3 +1,4 @@
+import { saveGameStateToLocalStorage } from './gameState.js';
 import { createNewRoundScoreCell } from './roundManagement.js';
 
 /**
@@ -119,6 +120,8 @@ export function removePlayer(playerHeader) {
     totalsRow.deleteCell(playerIndex);
 
     enableAddPlayerButton();
+
+    saveGameStateToLocalStorage();
 }
 
 /**
