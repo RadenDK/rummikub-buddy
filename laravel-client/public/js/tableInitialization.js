@@ -59,6 +59,6 @@ export function initializeTable(gameState = null) {
  * Adds event listeners to DOM elements after the page has loaded.
  */
 export function setupEventListeners() {
-    document.getElementById('add-round-btn').addEventListener('click', addNewRound);
-    document.getElementById('add-player-btn').addEventListener('click', addPlayer);
+    document.getElementById('add-round-btn').addEventListener('click', () => addNewRound());
+    document.getElementById('add-player-btn').addEventListener('click', () => addPlayer());
 }
