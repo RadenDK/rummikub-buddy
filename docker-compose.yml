@@ -1,0 +1,40 @@
+services:
+  laravel-api:
+    container_name: rummikub-buddy-api
+    build:
+      context: ./laravel-api
+      dockerfile: Dockerfile
+    volumes:
+      - ./laravel-api:/var/www/html
+    networks:
+      - dev-env-network
+    ports:
+      - "8001:80"
+    command: >
+      sh -c "
+      chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache &&
+      chmod -R 775 /var/www/html/storage /var/www/html/bootstrap/cache &&
+      apache2-foreground
+      "
+
+  laravel-client:
+    container_name: rummikub-buddy-client
+    build:
+      context: ./laravel-client
+      dockerfile: Dockerfile
+    volumes:
+      - ./laravel-client:/var/www/html
+    networks:
+      - dev-env-network
+    ports:
+      - "8000:80"
+    command: >
+      sh -c "
+      chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache &&
+      chmod -R 775 /var/www/html/storage /var/www/html/bootstrap/cache &&
+      apache2-foreground
+      "
+
+networks:
+  dev-env-network:
+    external: true
