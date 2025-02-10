@@ -24,7 +24,6 @@ export function saveGameStateToLocalStorage() {
     const { players, rounds } = getGameStateFromDOM();
     const gameState = { players, rounds };
     localStorage.setItem('gameState', JSON.stringify(gameState));
-    console.log('Game state saved:', gameState); // Debugging log
 }
 
 // Function to retrieve the game state from local storage
@@ -35,13 +34,10 @@ export function loadGameStateFromLocalStorage() {
         return null;
     }
 
-    const gameState = JSON.parse(savedState);
-    console.log('Game state loaded:', gameState); // Debugging log
-    return gameState;
+    return JSON.parse(savedState);
 }
 
 // Function to clear the game state from local storage
 export function clearGameStateFromLocalStorage() {
     localStorage.removeItem('gameState');
-    console.log('Game state cleared.');
 }
