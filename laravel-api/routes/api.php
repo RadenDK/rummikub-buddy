@@ -2,7 +2,7 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\MatchController;
+use App\Http\Controllers\GameController;
 
 
 Route::get('/user', function (Request $request) {
@@ -14,5 +14,4 @@ Route::get('/', function () {
     return "Api is running";
 });
 
-//Route::post('/match', [MatchController::class, 'saveMatch'])->middleware(ValidateApiKey::class);
-Route::post('/match', [MatchController::class, 'saveMatch']);
+Route::post('/game', [GameController::class, 'saveGame']);
