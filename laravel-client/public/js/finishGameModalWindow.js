@@ -1,4 +1,4 @@
-import { clearGameStateFromLocalStorage } from './gameState.js';
+import {clearGameStateFromLocalStorage, getGameStateFromDOM} from './gameState.js';
 
 export function initializeModalWindow() {
     // Get modal and buttons
@@ -14,8 +14,24 @@ export function initializeModalWindow() {
 
     // Save game action
     saveGameBtn.addEventListener('click', () => {
-        // Add logic to save the game here
-        console.log('Game saved!');
+        const gameState = getGameStateFromDOM();
+
+        fetch('/save-game-state', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+            },
+            body: JSON.stringify({ gameState })
+        })
+            .then(response => response.json())
+            .then(data => {
+                console.log('Game save Success:', data);
+            })
+            .catch((error) => {
+                console.error('Game save Error:', error);
+            });
+
         finishGameModal.style.display = 'none';
     });
 
