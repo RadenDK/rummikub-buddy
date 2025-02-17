@@ -3,7 +3,6 @@
 namespace Database\Seeders;
 
 use App\Models\User;
-// use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
@@ -13,8 +12,15 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // User::factory(10)->create();
+        // Call the custom seeders
+        $this->call([
+            PlayerSeeder::class,
+            GameSeeder::class,
+            RoundSeeder::class,
+            PlayerRoundScoreSeeder::class,
+        ]);
 
+        // Optionally, you can keep the user factory seeder
         User::factory()->create([
             'name' => 'Test User',
             'email' => 'test@example.com',
