@@ -23,6 +23,10 @@ return new class extends Migration
      */
     public function down(): void
     {
+        // Drop the player_round_scores table first
+        Schema::dropIfExists('player_round_scores');
+
+        // Then drop the rounds score after that
         Schema::dropIfExists('rounds');
     }
 };

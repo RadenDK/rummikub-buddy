@@ -11,7 +11,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('player_round_score', function (Blueprint $table) {
+        Schema::create('player_round_scores', function (Blueprint $table) {
             $table->id();
             $table->foreignId('round_id')->constrained('rounds');
             $table->foreignId('player_id')->constrained('players');
