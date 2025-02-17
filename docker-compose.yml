@@ -4,6 +4,7 @@ services:
     build:
       context: ./laravel-api
       dockerfile: Dockerfile
+    user: root
     volumes:
       - ./laravel-api:/var/www/html
     networks:
@@ -22,6 +23,7 @@ services:
     build:
       context: ./laravel-client
       dockerfile: Dockerfile
+    user: root
     volumes:
       - ./laravel-client:/var/www/html
     networks:
