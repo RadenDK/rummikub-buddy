@@ -20,4 +20,9 @@ class Game extends Model
     {
         return $this->hasMany(Round::class);
     }
+
+    public function players()
+    {
+        return $this->hasManyThrough(Player::class, PlayerRoundScore::class, 'round_id', 'id', 'id', 'player_id');
+    }
 }

@@ -28,6 +28,6 @@ class Player extends Model
 
     public function rounds()
     {
-        return $this->belongsToMany(Round::class, 'player_round')->withPivot('player_order', 'score')->withTimestamps();
+        return $this->belongsToMany(Round::class, 'player_round_scores')->withPivot('player_order', 'score')->withTimestamps();
     }
 }
