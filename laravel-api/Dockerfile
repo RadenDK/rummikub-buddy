@@ -22,10 +22,6 @@ COPY . .
 # Ensure Laravel serves from the public/ directory
 RUN sed -i 's|DocumentRoot /var/www/html|DocumentRoot /var/www/html/public|' /etc/apache2/sites-available/000-default.conf
 
-# Set correct permissions
-RUN chown -R www-data:www-data storage bootstrap/cache \
-    && chmod -R 775 storage bootstrap/cache
-
 # Expose port 80
 EXPOSE 80
 
