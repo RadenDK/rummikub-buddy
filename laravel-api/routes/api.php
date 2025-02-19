@@ -14,4 +14,6 @@ Route::get('/', function () {
     return "Api is running";
 });
 
-Route::post('/game', [GameController::class, 'saveGame']);
+Route::get('/games/{email}', [GameController::class, 'getGames']);
+
+Route::post('/games', [GameController::class, 'saveGame']);
