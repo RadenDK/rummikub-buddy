@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('players', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->string('google_id')->nullable()->unique();
+            $table->string('email')->nullable()->unique();
             $table->foreignId('main_player_id')->nullable()->constrained('players');
             $table->timestamps();
         });
