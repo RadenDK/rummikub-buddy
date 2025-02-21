@@ -4,7 +4,7 @@ namespace App\Service;
 
 use GuzzleHttp\Exception\GuzzleException;
 
-class GameStateService
+class GameService
 {
     protected ApiService $apiService;
 
@@ -13,10 +13,11 @@ class GameStateService
         $this->apiService = $apiService;
     }
 
-    public function saveGame(array $gameState): bool
+    public function saveGame(string $email ,array $gameState): bool
     {
+
         $baseUrl = env('API_BASE_ENDPOINT');
-        $endpoint = "/game";
+        $endpoint = "/games/$email";
         $url = $baseUrl . $endpoint;
 
         $options = [
@@ -30,4 +31,6 @@ class GameStateService
             return false;
         }
     }
+
+
 }
