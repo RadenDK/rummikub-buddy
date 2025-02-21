@@ -2,18 +2,32 @@
 
 namespace App\Http\Controllers;
 
-use App\Service\GameStateService;
+use App\Service\GameService;
+use App\Service\PlayerService;
+use Illuminate\Contracts\View\Factory;
+use Illuminate\Contracts\View\View;
+use Illuminate\Foundation\Application;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Log;
 use Symfony\Component\HttpFoundation\JsonResponse;
 
 class GameController
 {
-    protected GameStateService $gameStateService;
+    protected GameService $gameStateService;
+    protected PlayerService $playerService;
 
-    public function __construct(GameStateService $gameStateService)
+    public function __construct(GameService $gameStateService, PlayerService $playerService)
     {
         $this->gameStateService = $gameStateService;
+        $this->playerService = $playerService;
+    }
+
+    public function showDashboard(Request $request): View|Application|Factory
+    {
+        $user = $request->session()->get('google_user');
+
+        $listOfPriorUsedPlayers = $this->playerService->getListOfPriorUsedPlayers($user['email']);
+
+        return view('dashboard', ['userName' => $user['name'], 'listOfPriorUsedPlayers' => $listOfPriorUsedPlayers]);
     }
 
     public function saveGame(Request $request): JsonResponse
@@ -29,7 +43,7 @@ class GameController
             unset($player['isMain']);
         }
 
-        $responseSuccess = $this->gameStateService->saveGame($game);
+        $responseSuccess = $this->gameStateService->saveGame(email: $googleUserEmail, gameState: $game);
 
         if ($responseSuccess) {
             return response()->json(['message' => 'Game saved'], 200);

@@ -9,10 +9,8 @@ Route::get('/', [LoginController::class, 'index']);
 
 Route::get('/login', [LoginController::class, 'showLoginForm'])->name('login');
 
-Route::get('/dashboard', function () {
-    $user = session('google_user');
-    return view('dashboard', ['userName' => $user['name']]);
-})->middleware(CheckLogin::class);
+
+Route::get('/dashboard', [GameController::class, 'showDashboard'])->middleware(CheckLogin::class);
 
 
 Route::get('auth/google', [LoginController::class, 'redirectToGoogle']);
