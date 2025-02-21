@@ -15,9 +15,10 @@ Route::get('/', function () {
 
 Route::prefix('games')->group(function () {
     Route::get('/{email}', [GameController::class, 'getGames']);
-    Route::post('/', [GameController::class, 'saveGame']);
+    Route::post('/{email}', [GameController::class, 'saveGame']);
 });
 
 Route::prefix('players')->group(function () {
     Route::get('/{email}', [PlayerController::class, 'getNonMainPlayers']);
+    Route::post('/', [PlayerController::class, 'saveMainPlayer']);
 });

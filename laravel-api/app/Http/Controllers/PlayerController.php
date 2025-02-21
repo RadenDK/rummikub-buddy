@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\SaveMainPlayerRequest;
 use App\Models\Player;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Facades\Request;
 
 class PlayerController
 {
@@ -20,5 +22,22 @@ class PlayerController
             ->get();
 
         return response()->json($players);
+    }
+
+    public function saveMainPlayer(SaveMainPlayerRequest $request): JsonResponse
+    {
+        $data = $request->validated();
+
+        // Check if the player already exists
+        $player = Player::where('email', $data['email'])->first();
+
+        if (is_null($player)) {
+            $player = Player::create([
+                'email' => $data['email'],
+                'name' => $data['name'],
+            ]);
+        }
+
+        return response()->json($player);
     }
 }
