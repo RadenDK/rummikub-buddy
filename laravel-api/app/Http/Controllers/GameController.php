@@ -27,37 +27,27 @@ class GameController
         return response()->json($games);
     }
 
-    public function saveGame(Request $request): JsonResponse
+    public function saveGame(Request $request, string $email): JsonResponse
     {
-        $gameData = $request->input()['gameState'];
+        $gameData = $request->input('gameState');
 
         $playersData = $gameData['players'];
         $roundsData = $gameData['rounds'];
 
-
-        // Iterate over the players to first find the main player
-        foreach ($playersData as $playerData) {
-            if (isset($playerData['email'])) {
-                $mainPlayer = Player::firstOrCreate([
-                    'email' => $playerData['email'],
-                    'name' => $playerData['name'],
-                ]);
-                break;
-            }
-        }
+        // Find the main player using the email from the route parameters
+        $mainPlayer = Player::where('email', $email)->firstOrFail();
 
         $players = [];
-        if (isset($mainPlayer)) {
-            foreach ($playersData as $playerData) {
-                if (!isset($playerData['email'])) {
-                    $player = Player::firstOrCreate([
-                        'name' => $playerData['name'],
-                        'main_player_id' => $mainPlayer->id,
-                    ]);
-                    $players[] = $player;
-                } else {
-                    $players[] = $mainPlayer;
-                }
+        foreach ($playersData as $playerData) {
+            // If the player doesn't have an email this means it is a player associated with the main player
+            if (!isset($playerData['email'])) {
+                $player = Player::firstOrCreate([
+                    'name' => $playerData['name'],
+                    'main_player_id' => $mainPlayer->id,
+                ]);
+                $players[] = $player;
+            } else {
+                $players[] = $mainPlayer;
             }
         }
 
