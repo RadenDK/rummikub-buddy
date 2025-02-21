@@ -76,6 +76,7 @@
 <script>
     const googleFullName = {!! json_encode(session('google_user')['name'] ?? null) !!};
     const googleFirstName = googleFullName ? googleFullName.split(' ')[0] : null;
+    const priorUsedPlayers = {!! json_encode($listOfPriorUsedPlayers) !!};
 </script>
 
 

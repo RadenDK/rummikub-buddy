@@ -24,10 +24,12 @@ class GameController
     public function showDashboard(Request $request): View|Application|Factory
     {
         $user = $request->session()->get('google_user');
-
         $listOfPriorUsedPlayers = $this->playerService->getListOfPriorUsedPlayers($user['email']);
 
-        return view('dashboard', ['userName' => $user['name'], 'listOfPriorUsedPlayers' => $listOfPriorUsedPlayers]);
+        return view('dashboard', [
+            'userName' => $user['name'],
+            'listOfPriorUsedPlayers' => $listOfPriorUsedPlayers
+        ]);
     }
 
     public function saveGame(Request $request): JsonResponse

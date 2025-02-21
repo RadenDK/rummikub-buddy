@@ -13,7 +13,7 @@ class GameService
         $this->apiService = $apiService;
     }
 
-    public function saveGame(string $email ,array $gameState): bool
+    public function saveGame(string $email, array $gameState): bool
     {
 
         $baseUrl = env('API_BASE_ENDPOINT');

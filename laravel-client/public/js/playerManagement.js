@@ -36,71 +36,131 @@ export function addPlayer(playerName = null, mainPlayer = false) {
 
 /**
  * Creates a new player header.
- * 
+ *
  * @param {string} playerName - The name of the player.
  * @param {boolean} mainPlayer - Whether this player is the main player.
  */
+let selectedPlayers = new Set();
+
 export function addPlayerHeader(playerName, mainPlayer = false) {
     const playerRow = document.getElementById('player-row');
     const playerHeader = document.createElement('th');
 
-    // Add a data attribute to indicate if this is the main player
     if (mainPlayer) {
-        playerHeader.setAttribute('data-main-player', 'true');
+        // Main player code remains the same
+        const nameInput = document.createElement('input');
+        nameInput.type = 'text';
+        nameInput.value = playerName;
+        nameInput.className = 'player-name-input';
+        nameInput.disabled = true;
+        playerHeader.appendChild(nameInput);
     } else {
-        playerHeader.setAttribute('data-main-player', 'false');
-    }
+        const comboWrapper = document.createElement('div');
+        comboWrapper.className = 'combo-wrapper';
 
-    // Create an input for the player's name
-    const nameInput = document.createElement('input');
-    nameInput.type = 'text';
-    nameInput.value = playerName;
-    nameInput.className = 'player-name-input';
-    if (mainPlayer) {
-        nameInput.disabled = true; // Disable editing for the main player
-    }
+        const nameInput = document.createElement('input');
+        nameInput.type = 'text';
+        nameInput.value = playerName;
+        nameInput.className = 'player-name-input';
 
-    // Add keydown event listener for Enter key
-    nameInput.addEventListener('keydown', (event) => {
-        if (event.key === 'Enter') {
-            event.preventDefault(); // Prevent default Enter behavior
-            const nextElement = getNextFocusableElement(nameInput);
-            nextElement?.focus(); // Focus on the next focusable element, if any
+        // Find the player ID for the initial value
+        const initialPlayer = priorUsedPlayers.find(p => p.name === playerName);
+        if (initialPlayer) {
+            nameInput.dataset.playerId = initialPlayer.id;
+            selectedPlayers.add(initialPlayer.id);
         }
-    });
 
-    playerHeader.appendChild(nameInput);
+        const toggleButton = document.createElement('button');
+        toggleButton.type = 'button';
+        toggleButton.className = 'combo-toggle';
+        toggleButton.innerHTML = '▼';
 
-    // If not the main player, add a remove button
-    if (!mainPlayer) {
+        const dropdown = document.createElement('div');
+        dropdown.className = 'combo-dropdown';
+
+        // Create and update dropdown options
+        function refreshDropdownOptions() {
+            dropdown.innerHTML = '';  // Clear existing options
+            priorUsedPlayers.forEach(player => {
+                const option = document.createElement('div');
+                option.className = 'combo-option';
+                option.textContent = player.name;
+                option.setAttribute('data-id', player.id);
+
+                if (selectedPlayers.has(player.id) && nameInput.dataset.playerId !== player.id) {
+                    option.classList.add('disabled-option');
+                    option.style.pointerEvents = 'none';
+                } else {
+                    option.addEventListener('click', () => {
+                        const oldPlayerId = nameInput.dataset.playerId;
+                        if (oldPlayerId) {
+                            selectedPlayers.delete(oldPlayerId);
+                        }
+                        nameInput.value = player.name;
+                        nameInput.dataset.playerId = player.id;
+                        selectedPlayers.add(player.id);
+                        dropdown.style.display = 'none';
+                        updateAllDropdowns();
+                    });
+                }
+                dropdown.appendChild(option);
+            });
+        }
+
+        refreshDropdownOptions();
+
+        toggleButton.addEventListener('click', (e) => {
+            e.stopPropagation();
+            const isVisible = dropdown.style.display === 'block';
+            dropdown.style.display = isVisible ? 'none' : 'block';
+            if (!isVisible) {
+                refreshDropdownOptions();  // Refresh options when opening
+            }
+        });
+
+        document.addEventListener('click', () => {
+            dropdown.style.display = 'none';
+        });
+
+        comboWrapper.appendChild(nameInput);
+        comboWrapper.appendChild(toggleButton);
+        comboWrapper.appendChild(dropdown);
+        playerHeader.appendChild(comboWrapper);
+
         const removeButton = document.createElement('button');
         removeButton.textContent = '-';
         removeButton.className = 'remove-btn';
-        removeButton.addEventListener('click', () => removePlayer(playerHeader));
+        removeButton.addEventListener('click', () => {
+            if (nameInput.dataset.playerId) {
+                selectedPlayers.delete(nameInput.dataset.playerId);
+            }
+            removePlayer(playerHeader);
+            updateAllDropdowns();
+        });
         playerHeader.appendChild(removeButton);
     }
 
+    playerHeader.setAttribute('data-main-player', mainPlayer.toString());
     playerRow.appendChild(playerHeader);
 }
 
-/**
- * Finds the next focusable element in the DOM after the given element.
- * 
- * @param {HTMLElement} currentElement - The current element.
- * @returns {HTMLElement|null} - The next focusable element or null if none exists.
- */
-function getNextFocusableElement(currentElement) {
-    const focusableSelectors = 'input, button, [contenteditable="true"], select, textarea, a[href]';
-    const allFocusable = Array.from(document.querySelectorAll(focusableSelectors));
-    const currentIndex = allFocusable.indexOf(currentElement);
+function updateAllDropdowns() {
+    document.querySelectorAll('.combo-wrapper').forEach(wrapper => {
+        const dropdown = wrapper.querySelector('.combo-dropdown');
+        const nameInput = wrapper.querySelector('.player-name-input');
 
-    if (currentIndex >= 0 && currentIndex < allFocusable.length - 1) {
-        return allFocusable[currentIndex + 1];
-    }
-    return null;
+        dropdown.querySelectorAll('.combo-option').forEach(option => {
+            const playerId = option.getAttribute('data-id');
+            if (selectedPlayers.has(playerId) && nameInput.dataset.playerId !== playerId) {
+                option.classList.add('disabled-option');
+                option.style.pointerEvents = 'none';
+            } else {
+                option.classList.remove('disabled-option');
+                option.style.pointerEvents = 'auto';
+            }
+        });
+    });
 }
-
-
 
 /**
  * Removes a player from the table.
