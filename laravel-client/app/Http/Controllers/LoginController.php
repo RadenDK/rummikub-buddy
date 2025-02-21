@@ -2,11 +2,20 @@
 
 namespace App\Http\Controllers;
 
-use Laravel\Socialite\Facades\Socialite;
+use App\Service\PlayerService;
 use Illuminate\Http\Request;
+use Laravel\Socialite\Facades\Socialite;
 
 class LoginController
 {
+
+    protected PlayerService $playerService;
+
+    public function __construct(PlayerService $playerService)
+    {
+        $this->playerService = $playerService;
+    }
+
     public function index(Request $request)
     {
         // Check if the user session exists
@@ -49,6 +58,8 @@ class LoginController
                     'avatar' => $googleUser->getAvatar(),
                 ]
             ]);
+
+            $this->playerService->saveMainPlayer($googleUser->getEmail(), $googleUser->getName());
 
             // Redirect to the dashboard view
             return redirect('/dashboard');
