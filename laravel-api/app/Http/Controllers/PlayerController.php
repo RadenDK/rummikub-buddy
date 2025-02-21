@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Player;
 use Illuminate\Http\JsonResponse;
 
-class PlayerController extends Controller
+class PlayerController
 {
     public function getNonMainPlayers(string $email): JsonResponse
     {

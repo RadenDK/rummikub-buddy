@@ -7,7 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Symfony\Component\HttpFoundation\JsonResponse;
 
-class GameController extends Controller
+class GameController
 {
     protected GameStateService $gameStateService;
 

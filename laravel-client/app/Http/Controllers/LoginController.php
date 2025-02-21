@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use Laravel\Socialite\Facades\Socialite;
 use Illuminate\Http\Request;
 
-class LoginController extends Controller
+class LoginController
 {
     public function index(Request $request)
     {
