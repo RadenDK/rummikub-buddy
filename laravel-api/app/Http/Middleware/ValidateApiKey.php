@@ -15,6 +15,11 @@ class ValidateApiKey
      */
     public function handle(Request $request, Closure $next): Response
     {
+        $apiKey = $request->header('x-api-key');
+        if ($apiKey !== env('API_KEY')) {
+            return response()->json(['message' => 'Unauthorized'], 401);
+        }
+
         return $next($request);
     }
 }
