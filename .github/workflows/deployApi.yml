@@ -65,6 +65,7 @@ jobs:
               -e DB_DATABASE="${{ secrets.DB_DATABASE }}" \
               -e DB_USERNAME="${{ secrets.DB_USERNAME }}" \
               -e DB_PASSWORD="${{ secrets.DB_PASSWORD }}" \
+              -e API_KEY="${{ secrets.API_KEY }}" \
               -e APP_ENV=production \
               rummikub_buddy_api:latest
 
