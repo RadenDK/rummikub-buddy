@@ -9,7 +9,7 @@ export function initializeModalWindow() {
 
     // Show the modal when Finish Game is clicked
     finishGameBtn.addEventListener('click', () => {
-        finishGameModal.style.display = 'block';
+        finishGameModal.style.display = 'flex';
     });
 
     // Save game action
@@ -22,7 +22,7 @@ export function initializeModalWindow() {
                 'Content-Type': 'application/json',
                 'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
             },
-            body: JSON.stringify({ gameState })
+            body: JSON.stringify({gameState})
         })
             .then(response => response.json())
             .then(data => {
@@ -32,12 +32,13 @@ export function initializeModalWindow() {
                 console.error('Game save Error:', error);
             });
 
+        clearGameStateFromLocalStorage();
         finishGameModal.style.display = 'none';
+        location.reload(); // Reload the DOM
     });
 
     // Abort game action
     abortGameBtn.addEventListener('click', () => {
-        console.log('Game aborted!');
         clearGameStateFromLocalStorage();
         finishGameModal.style.display = 'none';
         location.reload(); // Reload the DOM

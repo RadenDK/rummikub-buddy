@@ -42,131 +42,167 @@ export function addPlayer(playerName = null, mainPlayer = false) {
  */
 let selectedPlayers = new Set();
 
-export function addPlayerHeader(playerName, mainPlayer = false) {
+function createNameInput(playerName, mainPlayer) {
+    const nameInput = document.createElement('input');
+    nameInput.type = 'text';
+    nameInput.value = playerName;
+    nameInput.className = 'player-name-input';
+    if (mainPlayer) {
+        nameInput.disabled = true;
+    }
+    return nameInput;
+}
+
+function createComboWrapper(nameInput, playerHeader) {
+    const comboWrapper = document.createElement('div');
+    comboWrapper.className = 'combo-wrapper';
+
+    const toggleButton = document.createElement('button');
+    toggleButton.type = 'button';
+    toggleButton.className = 'combo-toggle';
+    toggleButton.innerHTML = '▼';
+
+    const dropdown = document.createElement('div');
+    dropdown.className = 'combo-dropdown';
+
+    const buttonContainer = document.createElement('div');
+    buttonContainer.className = 'button-container';
+    buttonContainer.appendChild(toggleButton);
+
+    const removeButton = document.createElement('button');
+    removeButton.textContent = '-';
+    removeButton.className = 'remove-btn';
+    removeButton.addEventListener('click', () => {
+        if (nameInput.dataset.playerId) {
+            selectedPlayers.delete(nameInput.dataset.playerId);
+        }
+        removePlayer(playerHeader);
+        updateAllDropdowns();
+    });
+    buttonContainer.appendChild(removeButton);
+
+    function refreshDropdownOptions() {
+        dropdown.innerHTML = '';
+
+        priorUsedPlayers.forEach(player => {
+            const option = document.createElement('div');
+            option.className = 'combo-option';
+            option.textContent = player.name;
+            option.setAttribute('data-id', player.id);
+
+            // Disable if player is already selected and is not the current input
+            if (selectedPlayers.has(player.id) && nameInput.dataset.playerId !== player.id) {
+                option.classList.add('disabled-option');
+                option.style.pointerEvents = 'none';
+            } else {
+                option.classList.remove('disabled-option');
+                option.style.pointerEvents = 'auto';
+                option.addEventListener('click', () => handlePlayerSelection(nameInput, player.id, player.name, dropdown));
+            }
+            dropdown.appendChild(option);
+        });
+    }
+
+    toggleButton.addEventListener('click', (e) => {
+        e.stopPropagation();
+        dropdown.style.display = dropdown.style.display === 'block' ? 'none' : 'block';
+        refreshDropdownOptions();
+    });
+    document.addEventListener('click', () => dropdown.style.display = 'none');
+
+    comboWrapper.append(nameInput, buttonContainer, dropdown);
+    refreshDropdownOptions();
+    return comboWrapper;
+}
+
+function handlePlayerSelection(nameInput, playerId, playerName, dropdown) {
+    const oldPlayerId = nameInput.dataset.playerId;
+
+    // If the player was previously selected, remove them from the selectedPlayers set
+    if (oldPlayerId && selectedPlayers.has(oldPlayerId)) {
+        selectedPlayers.delete(oldPlayerId);
+    }
+
+    // Update the input field and dataset
+    nameInput.value = playerName;
+    nameInput.dataset.playerId = playerId;
+
+    // Mark the new player as selected
+    selectedPlayers.add(playerId);
+
+    dropdown.style.display = 'none';
+
+    // Ensure all dropdowns update correctly
+    updateAllDropdowns();
+}
+
+
+function addPlayerHeader(playerName, mainPlayer = false) {
     const playerRow = document.getElementById('player-row');
     const playerHeader = document.createElement('th');
 
-    if (mainPlayer) {
-        // Main player code remains the same
-        const nameInput = document.createElement('input');
-        nameInput.type = 'text';
-        nameInput.value = playerName;
-        nameInput.className = 'player-name-input';
-        nameInput.disabled = true;
-        playerHeader.appendChild(nameInput);
+    const nameInput = createNameInput(playerName, mainPlayer);
+
+    if (!mainPlayer) {
+        playerHeader.appendChild(createComboWrapper(nameInput, playerHeader));
     } else {
-        const comboWrapper = document.createElement('div');
-        comboWrapper.className = 'combo-wrapper';
-
-        const nameInput = document.createElement('input');
-        nameInput.type = 'text';
-        nameInput.value = playerName;
-        nameInput.className = 'player-name-input';
-
-        // Find the player ID for the initial value
-        const initialPlayer = priorUsedPlayers.find(p => p.name === playerName);
-        if (initialPlayer) {
-            nameInput.dataset.playerId = initialPlayer.id;
-            selectedPlayers.add(initialPlayer.id);
-        }
-
-        const toggleButton = document.createElement('button');
-        toggleButton.type = 'button';
-        toggleButton.className = 'combo-toggle';
-        toggleButton.innerHTML = '▼';
-
-        const dropdown = document.createElement('div');
-        dropdown.className = 'combo-dropdown';
-
-        // Create and update dropdown options
-        function refreshDropdownOptions() {
-            dropdown.innerHTML = '';  // Clear existing options
-            priorUsedPlayers.forEach(player => {
-                const option = document.createElement('div');
-                option.className = 'combo-option';
-                option.textContent = player.name;
-                option.setAttribute('data-id', player.id);
-
-                if (selectedPlayers.has(player.id) && nameInput.dataset.playerId !== player.id) {
-                    option.classList.add('disabled-option');
-                    option.style.pointerEvents = 'none';
-                } else {
-                    option.addEventListener('click', () => {
-                        const oldPlayerId = nameInput.dataset.playerId;
-                        if (oldPlayerId) {
-                            selectedPlayers.delete(oldPlayerId);
-                        }
-                        nameInput.value = player.name;
-                        nameInput.dataset.playerId = player.id;
-                        selectedPlayers.add(player.id);
-                        dropdown.style.display = 'none';
-                        updateAllDropdowns();
-                    });
-                }
-                dropdown.appendChild(option);
-            });
-        }
-
-        refreshDropdownOptions();
-
-        toggleButton.addEventListener('click', (e) => {
-            e.stopPropagation();
-            const isVisible = dropdown.style.display === 'block';
-            dropdown.style.display = isVisible ? 'none' : 'block';
-            if (!isVisible) {
-                refreshDropdownOptions();  // Refresh options when opening
-            }
-        });
-
-        document.addEventListener('click', () => {
-            dropdown.style.display = 'none';
-        });
-
-        comboWrapper.appendChild(nameInput);
-        comboWrapper.appendChild(toggleButton);
-        comboWrapper.appendChild(dropdown);
-        playerHeader.appendChild(comboWrapper);
-
-        const removeButton = document.createElement('button');
-        removeButton.textContent = '-';
-        removeButton.className = 'remove-btn';
-        removeButton.addEventListener('click', () => {
-            if (nameInput.dataset.playerId) {
-                selectedPlayers.delete(nameInput.dataset.playerId);
-            }
-            removePlayer(playerHeader);
-            updateAllDropdowns();
-        });
-        playerHeader.appendChild(removeButton);
+        playerHeader.appendChild(nameInput);
     }
 
     playerHeader.setAttribute('data-main-player', mainPlayer.toString());
     playerRow.appendChild(playerHeader);
 }
 
+
 function updateAllDropdowns() {
+    // Rebuild the set of currently selected player IDs
+    selectedPlayers.clear();
+    document.querySelectorAll('.player-name-input').forEach(input => {
+        if (input.dataset.playerId) {
+            selectedPlayers.add(input.dataset.playerId);
+        }
+    });
+
     document.querySelectorAll('.combo-wrapper').forEach(wrapper => {
         const dropdown = wrapper.querySelector('.combo-dropdown');
         const nameInput = wrapper.querySelector('.player-name-input');
 
-        dropdown.querySelectorAll('.combo-option').forEach(option => {
-            const playerId = option.getAttribute('data-id');
-            if (selectedPlayers.has(playerId) && nameInput.dataset.playerId !== playerId) {
+        dropdown.innerHTML = ''; // Clear existing options to rebuild
+
+        priorUsedPlayers.forEach(player => {
+            const option = document.createElement('div');
+            option.className = 'combo-option';
+            option.textContent = player.name;
+            option.setAttribute('data-id', player.id);
+
+            // Ensure only players currently selected by OTHER inputs are disabled
+            if (selectedPlayers.has(player.id) && nameInput.dataset.playerId !== player.id) {
                 option.classList.add('disabled-option');
                 option.style.pointerEvents = 'none';
             } else {
                 option.classList.remove('disabled-option');
                 option.style.pointerEvents = 'auto';
+                option.addEventListener('click', () => handlePlayerSelection(nameInput, player.id, player.name, dropdown));
             }
+
+            dropdown.appendChild(option);
         });
     });
 }
+
 
 /**
  * Removes a player from the table.
  */
 export function removePlayer(playerHeader) {
     const playerIndex = Array.from(playerHeader.parentNode.children).indexOf(playerHeader);
+    const nameInput = playerHeader.querySelector('.player-name-input');
+
+    // Remove from selectedPlayers if it exists
+    if (nameInput && nameInput.dataset.playerId) {
+        selectedPlayers.delete(nameInput.dataset.playerId);
+    }
+
     const playerRow = document.getElementById('player-row');
     const roundsBody = document.getElementById('rounds-body');
     const totalsRow = document.getElementById('totals-row');
@@ -180,9 +216,11 @@ export function removePlayer(playerHeader) {
     totalsRow.deleteCell(playerIndex);
 
     enableAddPlayerButton();
+    updateAllDropdowns(); // Ensure all dropdowns update
 
     saveGameStateToLocalStorage();
 }
+
 
 /**
  * Disables the "Add Player" button.

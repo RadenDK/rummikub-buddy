@@ -30,7 +30,6 @@ export function saveGameStateToLocalStorage() {
 export function loadGameStateFromLocalStorage() {
     const savedState = localStorage.getItem('gameState');
     if (!savedState) {
-        console.log('No saved game state found.');
         return null;
     }
 
