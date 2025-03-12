@@ -7,7 +7,7 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>Rummikub Manager</title>
     <!-- Link to CSS -->
-    <link rel="stylesheet" href="{{ asset('css/dashboard.css') }}">
+    <link rel="stylesheet" href="css/dashboard.css">
 
     <!-- import sortable from CDN -->
     <script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.0/Sortable.min.js"></script>
@@ -70,7 +70,7 @@
 </div>
 
 <!-- Link to JS -->
-<script type="module" src="{{ asset('js/main.js') }}"></script>
+<script type="module" src="js/main.js"></script>
 </body>
 
 <script>
