@@ -5,8 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\LoginController;
 use App\Http\Middleware\CheckLogin;
 
-//Route::get('/', [LoginController::class, 'index']);
-Route::get('/', function () {return "Hello world";});
+Route::get('/', [LoginController::class, 'index']);
 
 Route::get('/login', [LoginController::class, 'showLoginForm'])->name('login');
 
