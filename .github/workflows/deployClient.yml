@@ -60,8 +60,7 @@ jobs:
               --name rummikub_buddy_client \
               -e APP_KEY="${{ secrets.CLIENT_APP_KEY }}" \
               -e APP_ENV=production \
-              -e APP_DEBUG=true \
-              -e LOG_CHANNEL=single \
+              -e APP_DEBUG=false \
               -e API_BASE_ENDPOINT="${{ secrets.API_BASE_ENDPOINT }}" \
               -e X_API_KEY="${{ secrets.API_KEY }}" \
               -e GOOGLE_CLIENT_ID="${{ secrets.GOOGLE_CLIENT_ID }}" \
