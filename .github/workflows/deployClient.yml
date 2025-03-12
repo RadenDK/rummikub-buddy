@@ -61,6 +61,7 @@ jobs:
               -e APP_KEY="${{ secrets.CLIENT_APP_KEY }}" \
               -e APP_ENV=production \
               -e APP_DEBUG=false \
+              -e APP_URL=https://rummikubbuddy.rasmusjensen.tech \
               -e API_BASE_ENDPOINT="${{ secrets.API_BASE_ENDPOINT }}" \
               -e X_API_KEY="${{ secrets.API_KEY }}" \
               -e GOOGLE_CLIENT_ID="${{ secrets.GOOGLE_CLIENT_ID }}" \
