@@ -18,16 +18,14 @@ class LoginController
 
     public function index(Request $request)
     {
-        $testResult = $this->playerService->test();
-
         // Check if the user session exists
         if ($request->session()->has('google_user')) {
             // If the user session exists, redirect to the dashboard
             return redirect('/dashboard');
         }
 
-        // Otherwise, redirect to the login page with the test result
-        return view('login', ['testResult' => $testResult]);
+        // Otherwise, redirect to the login page
+        return redirect('/login');
     }
 
     public function showLoginForm(Request $request)
