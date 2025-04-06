@@ -49,4 +49,16 @@ class PlayerService
         }
     }
 
+    public function test(): string
+    {
+        $baseUrl = env('API_BASE_ENDPOINT');
+
+        try {
+            $response = $this->apiService->getRequest($baseUrl);
+            return $response->getBody()->getContents();
+        } catch (GuzzleException $e) {
+            return "Call to api not working";
+        }
+    }
+
 }
