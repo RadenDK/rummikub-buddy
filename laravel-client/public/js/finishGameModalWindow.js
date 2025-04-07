@@ -16,25 +16,36 @@ export function initializeModalWindow() {
     saveGameBtn.addEventListener('click', () => {
         const gameState = getGameStateFromDOM();
 
+        // Get the CSRF token from the meta tag
+        const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+
         fetch('/save-game-state', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
-                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+                'X-CSRF-TOKEN': csrfToken
             },
             body: JSON.stringify({gameState})
         })
-            .then(response => response.json())
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error(`Network response was not ok: ${response.status}`);
+                }
+                return response.json();
+            })
             .then(data => {
                 console.log('Game save Success:', data);
+                clearGameStateFromLocalStorage();
+                finishGameModal.style.display = 'none';
+                location.reload();
             })
             .catch((error) => {
                 console.error('Game save Error:', error);
+                console.error('Error details:', error.message);
+                clearGameStateFromLocalStorage();
+                finishGameModal.style.display = 'none';
+                location.reload();
             });
-
-        clearGameStateFromLocalStorage();
-        finishGameModal.style.display = 'none';
-        location.reload(); // Reload the DOM
     });
 
     // Abort game action
