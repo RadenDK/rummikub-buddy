@@ -15,7 +15,6 @@ class GameService
 
     public function saveGame(string $email, array $gameState): bool
     {
-
         $baseUrl = env('API_BASE_ENDPOINT');
         $endpoint = "/games/$email";
         $url = $baseUrl . $endpoint;
