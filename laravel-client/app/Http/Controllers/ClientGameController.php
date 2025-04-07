@@ -10,7 +10,7 @@ use Illuminate\Foundation\Application;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\JsonResponse;
 
-class GameController
+class ClientGameController
 {
     protected GameService $gameStateService;
     protected PlayerService $playerService;

@@ -9,7 +9,7 @@ use App\Models\Round;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
-class GameController
+class ApiGameController
 {
 
     public function getGames(string $email): JsonResponse

@@ -1,6 +1,6 @@
 <?php
 
-use App\Http\Controllers\GameController;
+use App\Http\Controllers\ApiGameController;
 use App\Http\Controllers\PlayerController;
 use App\Http\Middleware\ValidateApiKey;
 use Illuminate\Http\Request;
@@ -20,8 +20,8 @@ Route::middleware(ValidateApiKey::class)->group(function () {
     })->middleware('auth:sanctum');
 
     Route::prefix('games')->group(function () {
-        Route::get('/{email}', [GameController::class, 'getGames']);
-        Route::post('/{email}', [GameController::class, 'saveGame']);
+        Route::get('/{email}', [ApiGameController::class, 'getGames']);
+        Route::post('/{email}', [ApiGameController::class, 'saveGame']);
     });
 
     Route::prefix('players')->group(function () {
