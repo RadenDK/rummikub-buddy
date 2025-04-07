@@ -11,6 +11,7 @@ services:
       - dev-env-network
     ports:
       - "8001:80"
+    restart: always
 
   laravel-client:
     container_name: rummikub-buddy-client
@@ -24,6 +25,7 @@ services:
       - dev-env-network
     ports:
       - "8000:80"
+    restart: always
 
 networks:
   dev-env-network:
