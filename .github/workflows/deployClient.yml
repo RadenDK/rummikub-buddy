@@ -7,14 +7,12 @@ on:
 
 jobs:
   build-and-deploy:
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
 
     steps:
-      # Step 1: Check out your code
       - name: Checkout Code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
 
-      # Step 2: Build the Docker image for the Laravel client
       - name: Build Docker Image
         run: |
           docker build \
@@ -22,59 +20,23 @@ jobs:
             -f laravel-client/Dockerfile \
             laravel-client
 
-      # Step 3: Save the Docker image as a tar file for easy transfer
-      - name: Save Docker Image as Tarball
-        run: docker save rummikub_buddy_client:latest -o image.tar
+      - name: Stop old container
+        run: docker rm -f rummikub_buddy_client || true
 
-      # Step 4: (Optional) set permissions for the tar file
-      - name: Set permissions for Tarball
-        run: chmod 755 image.tar
+      - name: Run new container
+        run: |
+          docker run -d --restart=always -p 7002:80 \
+            --name rummikub_buddy_client \
+            -e APP_KEY="${{ secrets.CLIENT_APP_KEY }}" \
+            -e APP_ENV=production \
+            -e APP_DEBUG=false \
+            -e APP_URL=https://rummikubbuddy.rasmusjensen.tech \
+            -e API_BASE_ENDPOINT="${{ secrets.API_BASE_ENDPOINT }}" \
+            -e X_API_KEY="${{ secrets.API_KEY }}" \
+            -e GOOGLE_CLIENT_ID="${{ secrets.GOOGLE_CLIENT_ID }}" \
+            -e GOOGLE_CLIENT_SECRET="${{ secrets.GOOGLE_CLIENT_SECRET }}" \
+            -e GOOGLE_REDIRECT_URI="${{ secrets.GOOGLE_REDIRECT_URI }}" \
+            rummikub_buddy_client:latest
 
-      # Step 5: Copy the Docker image tar file to the VPS
-      - name: Copy image to VPS
-        uses: appleboy/scp-action@master
-        with:
-          host: ${{ secrets.VPS_IP }}
-          username: ${{ secrets.VPS_USER }}
-          key: ${{ secrets.VPS_SSH_KEY }}
-          source: image.tar
-          target: /root/
-
-      # Step 6: SSH into the VPS and deploy the Docker image
-      - name: SSH into VPS and deploy Docker image
-        uses: appleboy/ssh-action@master
-        with:
-          host: ${{ secrets.VPS_IP }}
-          username: ${{ secrets.VPS_USER }}
-          key: ${{ secrets.VPS_SSH_KEY }}
-          script: |
-            # 1. Load the new image
-            docker load -i /root/image.tar
-
-            # 2. Stop & remove the old container if it exists
-            docker stop rummikub_buddy_client || true
-            docker rm rummikub_buddy_client || true
-
-            # 3. Run the new container with environment variables
-            docker run -d --restart=always -p 7002:80 \
-              --name rummikub_buddy_client \
-              -e APP_KEY="${{ secrets.CLIENT_APP_KEY }}" \
-              -e APP_ENV=production \
-              -e APP_DEBUG=false \
-              -e APP_URL=https://rummikubbuddy.rasmusjensen.tech \
-              -e API_BASE_ENDPOINT="${{ secrets.API_BASE_ENDPOINT }}" \
-              -e X_API_KEY="${{ secrets.API_KEY }}" \
-              -e GOOGLE_CLIENT_ID="${{ secrets.GOOGLE_CLIENT_ID }}" \
-              -e GOOGLE_CLIENT_SECRET="${{ secrets.GOOGLE_CLIENT_SECRET }}" \
-              -e GOOGLE_REDIRECT_URI="${{ secrets.GOOGLE_REDIRECT_URI }}" \
-              rummikub_buddy_client:latest
-
-            # 4. (Optional) Clean up the tarball
-            rm -f /root/image.tar
-
-            # 5. Clean up old Docker images
-            docker image prune -f
-
-      # Step 7: (Optional) Clean up local tarball on the GitHub runner
-      - name: Clean Up Local Tarball
-        run: rm -f image.tar
+      - name: Prune old Docker images
+        run: docker image prune -f
