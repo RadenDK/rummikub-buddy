@@ -4,8 +4,6 @@ on:
   push:
     branches:
       - main
-    paths:
-      - 'laravel-api/**'
 
 jobs:
   build-and-deploy:
