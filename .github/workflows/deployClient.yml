@@ -25,7 +25,7 @@ jobs:
 
       - name: Run new container
         run: |
-          docker run -d --restart=always -p 7002:80 \
+          docker run -d --restart=always \
             --name rummikub_buddy_client \
             -e APP_KEY="${{ secrets.CLIENT_APP_KEY }}" \
             -e APP_ENV=production \
