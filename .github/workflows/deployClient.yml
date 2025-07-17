@@ -27,6 +27,7 @@ jobs:
         run: |
           docker run -d --restart=always \
             --name rummikub_buddy_client \
+            --network webproxy \
             -e APP_KEY="${{ secrets.CLIENT_APP_KEY }}" \
             -e APP_ENV=production \
             -e APP_DEBUG=false \

@@ -27,6 +27,7 @@ jobs:
         run: |
           docker run -d --restart=always \
             --name rummikub_buddy_api \
+            --network webproxy \
             -e APP_KEY="${{ secrets.API_APP_KEY }}" \
             -e DB_CONNECTION=pgsql \
             -e DB_HOST="${{ secrets.DB_HOST }}" \
