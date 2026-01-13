@@ -1,5 +1,5 @@
 import { enableAddRoundButton } from './roundManagement.js';
-import { saveGameStateToLocalStorage } from './gameState.js';
+import { saveCurrentGameState } from './gameState.js';
 
 /**
  * Handles changes to a score cell.
@@ -28,7 +28,7 @@ export function handleScoreChange(event) {
 
     updateColumnTotal(columnIndex);
     calculateWinnerScore(row);
-    saveGameStateToLocalStorage();
+    saveCurrentGameState();
 }
 
 /**

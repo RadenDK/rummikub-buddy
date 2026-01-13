@@ -47,6 +47,7 @@ body {
 .players-container {
     overflow-x: auto;
     margin-bottom: 20px;
+    max-height: 70vh;
 }
 
 .header-row {
@@ -257,25 +258,13 @@ body {
     box-shadow: 0 0 5px rgba(255, 255, 255, 0.3);
 }
 
-/* Player combo box styling */
-.combo-wrapper {
-    position: relative;
+/* Player wrapper styling */
+.player-wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: center;
     width: 100%;
-    display: flex;
-}
-
-.button-container {
-    display: flex;
-    margin-left: 5px;
-}
-
-.combo-toggle {
-    background: none;
-    border: none;
-    color: white;
-    cursor: pointer;
-    font-size: 14px;
-    padding: 0 5px;
+    gap: 5px;
 }
 
 .remove-btn {
@@ -287,43 +276,13 @@ body {
     padding: 2px 8px;
     border-radius: 3px;
     font-weight: bold;
-    margin-left: 5px;
     transition: all 0.2s ease;
+    flex-shrink: 0;
 }
 
 .remove-btn:hover {
     background: rgba(231, 76, 60, 1); /* Brighter red on hover */
     transform: scale(1.1);
-}
-
-.combo-dropdown {
-    display: none;
-    position: absolute;
-    top: 100%;
-    left: 0;
-    width: 100%;
-    background-color: white;
-    border: 1px solid #ddd;
-    border-radius: 5px;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-    z-index: 100;
-    max-height: 200px;
-    overflow-y: auto;
-}
-
-.combo-option {
-    padding: 8px 12px;
-    cursor: pointer;
-    color: #333;
-}
-
-.combo-option:hover {
-    background-color: #f5f5f5;
-}
-
-.disabled-option {
-    opacity: 0.5;
-    background-color: #eee;
 }
 
 /* Media Queries */

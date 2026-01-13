@@ -1,42 +1,70 @@
-// Function to retrieve the current game state from the DOM
-export function getGameStateFromDOM() {
-    // Get players from the column headers
-    const playerRow = document.getElementById('player-row');
-    const players = Array
-        .from(playerRow.querySelectorAll('th[data-main-player]'))
-        .map(header => ({
-            name: header.querySelector('.player-name-input')?.value.trim() || '',
-            isMain: header.getAttribute('data-main-player') === 'true'
-        }));
+/**
+ * Game state management for localStorage persistence
+ */
 
-
-    // Get rounds and scores from the table body
-    const roundsBody = document.getElementById('rounds-body');
-    const rounds = Array.from(roundsBody.rows).map(row =>
-        Array.from(row.cells).slice(1).map(cell => parseInt(cell.textContent.trim(), 10) || 0)
-    );
-
-    return { players, rounds };
-}
-
-// Function to save the game state to local storage
-export function saveGameStateToLocalStorage() {
-    const { players, rounds } = getGameStateFromDOM();
-    const gameState = { players, rounds };
-    localStorage.setItem('gameState', JSON.stringify(gameState));
-}
-
-// Function to retrieve the game state from local storage
+// Load game state from localStorage
 export function loadGameStateFromLocalStorage() {
-    const savedState = localStorage.getItem('gameState');
-    if (!savedState) {
-        return null;
-    }
-
-    return JSON.parse(savedState);
+    const savedState = localStorage.getItem('rummikubGameState');
+    return savedState ? JSON.parse(savedState) : null;
 }
 
-// Function to clear the game state from local storage
+// Save game state to localStorage
+export function saveGameStateToLocalStorage(gameState) {
+    localStorage.setItem('rummikubGameState', JSON.stringify(gameState));
+}
+
+// Clear game state from localStorage
 export function clearGameStateFromLocalStorage() {
-    localStorage.removeItem('gameState');
+    localStorage.removeItem('rummikubGameState');
+}
+
+// Create initial game state
+export function createInitialGameState(players = []) {
+    return {
+        players: players,
+        rounds: [],
+        currentRound: 0
+    };
+}
+
+// Collect current game state from the DOM
+export function getCurrentGameState() {
+    const players = [];
+    const rounds = [];
+    
+    // Get players from the player row
+    const playerHeaders = document.querySelectorAll('#player-row th');
+    for (let i = 1; i < playerHeaders.length; i++) { // Skip the first header (#)
+        const header = playerHeaders[i];
+        const nameInput = header.querySelector('.player-name-input');
+        const isMainPlayer = header.getAttribute('data-main-player') === 'true';
+        
+        players.push({
+            name: nameInput ? nameInput.value : `Player ${i}`,
+            isMain: isMainPlayer
+        });
+    }
+    
+    // Get rounds from the rounds body
+    const roundRows = document.querySelectorAll('#rounds-body tr');
+    roundRows.forEach(row => {
+        const cells = Array.from(row.cells).slice(1); // Skip the round number cell
+        const roundScores = cells.map(cell => {
+            const value = parseInt(cell.textContent.trim(), 10);
+            return isNaN(value) ? 0 : value;
+        });
+        rounds.push(roundScores);
+    });
+    
+    return {
+        players: players,
+        rounds: rounds,
+        currentRound: rounds.length
+    };
+}
+
+// Save current game state to localStorage
+export function saveCurrentGameState() {
+    const currentState = getCurrentGameState();
+    saveGameStateToLocalStorage(currentState);
 }

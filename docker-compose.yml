@@ -1,18 +1,4 @@
 services:
-  laravel-api:
-    container_name: rummikub-buddy-api
-    build:
-      context: ./laravel-api
-      dockerfile: Dockerfile
-    user: "1000:1000"
-    volumes:
-      - ./laravel-api:/var/www/html
-    networks:
-      - dev-env-network
-    ports:
-      - "8001:80"
-    restart: always
-
   laravel-client:
     container_name: rummikub-buddy-client
     build:

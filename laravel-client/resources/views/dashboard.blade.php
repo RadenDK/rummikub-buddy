@@ -8,20 +8,10 @@
     <title>Rummikub Manager</title>
     <!-- Link to CSS -->
     <link rel="stylesheet" href="css/dashboard.css">
-
-    <!-- import sortable from CDN -->
-    <script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.0/Sortable.min.js"></script>
-
-
 </head>
 
 <body>
 <div class="dashboard-container">
-    <!-- Profile Icon -->
-    <div class="profile-icon">
-        <img src="{{ session('google_user')['avatar'] }}" alt="Profile Icon" class="profile-img">
-    </div>
-
     <!-- Players Table -->
     <div class="players-container">
         <!-- Row containing the button and table -->
@@ -50,34 +40,12 @@
 
     <!-- Add Round Button -->
     <button id="add-round-btn" class="add-btn">Add Round</button>
-
-    <!-- Finish Button -->
-    <div class="finish-game-container">
-        <button id="finish-game-btn" class="finish-btn">Finish Game</button>
-    </div>
-</div>
-
-<!-- Modal Window -->
-<div id="finish-game-modal" class="modal">
-    <div class="modal-content">
-        <h2>Finish Game</h2>
-        <p>Are you sure you want to finish this game?</p>
-        <div class="modal-buttons">
-            <button id="abort-game-btn" class="modal-btn abort-btn">Abort Game</button>
-            <button id="save-game-btn" class="modal-btn save-btn">Save Game</button>
-        </div>
-    </div>
+    
+    <!-- New Game Button -->
+    <button id="new-game-btn" class="add-btn">New Game</button>
 </div>
 
 <!-- Link to JS -->
 <script type="module" src="js/main.js"></script>
 </body>
-
-<script>
-    const googleFullName = {!! json_encode(session('google_user')['name'] ?? null) !!};
-    const googleFirstName = googleFullName ? googleFullName.split(' ')[0] : null;
-    const priorUsedPlayers = {!! json_encode($listOfPriorUsedPlayers) !!};
-</script>
-
-
 </html>

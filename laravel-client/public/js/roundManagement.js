@@ -1,6 +1,6 @@
 import { removePlayerEditButtons } from './playerManagement.js';
 import { handleScoreChange } from './scoreCalculation.js';
-import { saveGameStateToLocalStorage } from './gameState.js';
+import { saveCurrentGameState } from './gameState.js';
 
 /**
  * Adds a new round via the "Add Round" button.
@@ -11,7 +11,7 @@ export function addNewRound() {
     createNewRoundRow();
 
     // Save the updated game state to local storage
-    saveGameStateToLocalStorage();
+    saveCurrentGameState();
 
     // Disable the Add Round button
     disableAddRoundButton();
