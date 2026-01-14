@@ -11,6 +11,8 @@
 </head>
 
 <body>
+        <h1> TESTING </h1>
+
 <div class="dashboard-container">
     <!-- Players Table -->
     <div class="players-container">
@@ -40,7 +42,7 @@
 
     <!-- Add Round Button -->
     <button id="add-round-btn" class="add-btn">Add Round</button>
-    
+
     <!-- New Game Button -->
     <button id="new-game-btn" class="add-btn">New Game</button>
 </div>
