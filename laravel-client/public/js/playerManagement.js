@@ -2,11 +2,13 @@ import { saveCurrentGameState } from './gameState.js';
 import { createNewRoundScoreCell } from './roundManagement.js';
 
 /**
- * Checks if the game has started (has any rounds with scores).
+ * Checks if the game has started (more than 1 round exists).
+ * The first round is the "setup" round where players can still be modified.
+ * Game officially starts when the second round is added.
  */
 function hasGameStarted() {
     const roundsBody = document.getElementById('rounds-body');
-    return roundsBody.rows.length > 0;
+    return roundsBody.rows.length > 1;
 }
 
 /**
@@ -76,6 +78,8 @@ function createNameInput(playerName, mainPlayer) {
             // Only allow name changes if game hasn't started
             if (!hasGameStarted()) {
                 saveCurrentGameState();
+                // Update the original name to the new value for future reverts
+                nameInput.setAttribute('data-original-name', nameInput.value);
             } else {
                 // Revert to original name if game has started
                 const originalName = nameInput.getAttribute('data-original-name');
@@ -88,9 +92,6 @@ function createNameInput(playerName, mainPlayer) {
         nameInput.addEventListener('keypress', (event) => {
             if (event.key === 'Enter') {
                 event.preventDefault();
-                if (!hasGameStarted()) {
-                    saveCurrentGameState();
-                }
                 nameInput.blur();
             }
         });
@@ -218,18 +219,32 @@ export function removePlayerEditButtons() {
 
 /**
  * Restores the "Add Player" button if it doesn't exist.
+ * Also recreates the header-row container if it was removed.
  */
 export function restoreAddPlayerButton() {
     // Check if the add player button already exists
     const existingButton = document.getElementById('add-player-btn');
     if (existingButton) {
+        existingButton.disabled = false; // Ensure it's enabled
         return; // Button already exists, no need to restore
     }
 
     // Find the header row where the button should be placed
-    const headerRow = document.querySelector('.header-row');
+    let headerRow = document.querySelector('.header-row');
+    
+    // If header row doesn't exist (was removed), recreate it
     if (!headerRow) {
-        return; // Header row not found
+        const playersContainer = document.querySelector('.players-container');
+        if (!playersContainer) {
+            return; // Players container not found, cannot restore
+        }
+        
+        // Create the header row container
+        headerRow = document.createElement('div');
+        headerRow.className = 'header-row';
+        
+        // Insert at the beginning of players-container
+        playersContainer.insertBefore(headerRow, playersContainer.firstChild);
     }
 
     // Create the add player button
