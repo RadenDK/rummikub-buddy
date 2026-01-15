@@ -1,5 +1,5 @@
-import { removePlayerEditButtons } from './playerManagement.js';
-import { handleScoreChange } from './scoreCalculation.js';
+import { removePlayerEditButtons, disablePlayerNameInputs } from './playerManagement.js';
+import { handleScoreChange, calculateWinnerScore } from './scoreCalculation.js';
 import { saveCurrentGameState } from './gameState.js';
 
 /**
@@ -49,9 +49,10 @@ export function createNewRoundRow(round = null) {
     // Append the new row to the rounds table body
     roundsBody.appendChild(newRow);
 
-    // Remove player edit buttons if more than one round exists
+    // Remove player edit buttons and disable name inputs when game starts (first round added)
     if (nextRoundCount > 1) {
         removePlayerEditButtons();
+        disablePlayerNameInputs();
     }
 }
 
@@ -76,9 +77,29 @@ export function createNewRoundScoreCell(score = 0) {
             nextElement?.focus(); // Focus the next element, if it exists
         }
     });
-    
 
+    // Apply styling based on the score value if it's not zero
+    if (score !== 0) {
+        applyScoreStyling(scoreCell, score);
+    }
+    
     return scoreCell;
+}
+
+/**
+ * Applies appropriate styling to a score cell based on its value.
+ * 
+ * @param {HTMLTableCellElement} cell - The score cell to style.
+ * @param {number} score - The score value.
+ */
+function applyScoreStyling(cell, score) {
+    if (score > 0) {
+        cell.setAttribute('data-winner', 'true');
+        cell.classList.add('winner-cell');
+    } else if (score < 0) {
+        cell.setAttribute('data-loser', 'true');
+        cell.classList.add('loser-cell');
+    }
 }
 
 /**

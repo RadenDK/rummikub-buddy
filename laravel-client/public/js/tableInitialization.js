@@ -1,7 +1,7 @@
-import { addPlayer } from './playerManagement.js';
+import { addPlayer, restoreAddPlayerButton, enablePlayerNameInputs } from './playerManagement.js';
 import { createNewRoundRow, addNewRound, readyForANewRound, enableAddRoundButton, disableAddRoundButton } from './roundManagement.js';
 import { initializeColumnDragging } from './playerDragable.js'
-import { updateAllColumnTotals } from './scoreCalculation.js';
+import { updateAllColumnTotals, calculateWinnerScore } from './scoreCalculation.js';
 import { clearGameStateFromLocalStorage, saveCurrentGameState } from './gameState.js';
 
 /**
@@ -47,22 +47,13 @@ export function initializeTable(gameState = null) {
         });
 
         updateAllColumnTotals(); // Update the column totals after loading the game state
+        
+        // Apply styling to existing round data
+        const roundsBody = document.getElementById('rounds-body');
+        Array.from(roundsBody.rows).forEach(row => {
+            calculateWinnerScore(row);
+        });
     }
-        // If a game state is provided with players, initialize with the saved players and rounds
-        const { players, rounds } = gameState;
-
-        // Step 1: Add players
-        players.forEach((player, index) => {
-            const isMainPlayer = player.isMain || false; // Check if the player is the main player
-            addPlayer(player.name, isMainPlayer);
-        });
-
-        // Step 2: Add existing rounds
-        rounds.forEach(round => {
-            createNewRoundRow(round); // Refactor `addNewRoundRow` to accept scores for the round
-        });
-
-        updateAllColumnTotals(); // Update the column totals after loading the game state
 
 
     if (readyForANewRound()) {
@@ -81,7 +72,12 @@ export function initializeTable(gameState = null) {
  */
 export function setupEventListeners() {
     document.getElementById('add-round-btn').addEventListener('click', () => addNewRound());
-    document.getElementById('add-player-btn').addEventListener('click', () => addPlayer());
+    
+    // Add event listener to "Add Player" button if it exists
+    const addPlayerBtn = document.getElementById('add-player-btn');
+    if (addPlayerBtn) {
+        addPlayerBtn.addEventListener('click', () => addPlayer());
+    }
     
     // Add new game button event listener
     const newGameBtn = document.getElementById('new-game-btn');
@@ -115,6 +111,9 @@ export function startNewGame() {
         while (totalsRow.children.length > 1) {
             totalsRow.removeChild(totalsRow.lastChild);
         }
+        
+        // Restore the "Add Player" button (fixes the bug)
+        restoreAddPlayerButton();
         
         // Re-initialize with defaults
         initializeTable();
