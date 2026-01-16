@@ -1,6 +1,5 @@
 import { addPlayer, restoreAddPlayerButton, enablePlayerNameInputs } from './playerManagement.js';
 import { createNewRoundRow, addNewRound, readyForANewRound, enableAddRoundButton, disableAddRoundButton } from './roundManagement.js';
-import { initializeColumnDragging } from './playerDragable.js'
 import { updateAllColumnTotals, calculateWinnerScore } from './scoreCalculation.js';
 import { clearGameStateFromLocalStorage, saveCurrentGameState } from './gameState.js';
 
@@ -61,9 +60,6 @@ export function initializeTable(gameState = null) {
     } else {
         disableAddRoundButton();
     }
-
-    // Step 3: Make player columns draggable
-    initializeColumnDragging();
 }
 
 

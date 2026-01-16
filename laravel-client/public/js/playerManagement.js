@@ -28,8 +28,7 @@ export function addPlayer(playerName = null, mainPlayer = false) {
     const playerCount = playerRow.children.length - 1; // Exclude the # column
     const newPlayerNumber = playerCount + 1;
 
-
-    // if no input is given, use the default player name
+    // If no input is given, use the default player name
     if (playerName === null) {
         playerName = `Player ${newPlayerNumber}`;
     }
@@ -48,56 +47,45 @@ export function addPlayer(playerName = null, mainPlayer = false) {
     if (newPlayerNumber >= 6) {
         disableAddPlayerButton();
     }
-    
-    // Set up event listener for the "Add Player" button if it doesn't have one
-    const addPlayerBtn = document.getElementById('add-player-btn');
-    if (addPlayerBtn && !addPlayerBtn.hasAttribute('data-listener-added')) {
-        addPlayerBtn.addEventListener('click', () => addPlayer());
-        addPlayerBtn.setAttribute('data-listener-added', 'true');
-    }
 }
 
 /**
- * Creates a new player header.
+ * Creates an editable name input for a player.
  *
  * @param {string} playerName - The name of the player.
- * @param {boolean} mainPlayer - Whether this player is the main player.
+ * @returns {HTMLInputElement} - The name input element.
  */
-
-
-function createNameInput(playerName, mainPlayer) {
+function createNameInput(playerName) {
     const nameInput = document.createElement('input');
     nameInput.type = 'text';
     nameInput.value = playerName;
     nameInput.className = 'player-name-input';
-    if (mainPlayer) {
-        nameInput.disabled = true;
-    } else {
-        // Add event listener to save game state when name changes
-        nameInput.addEventListener('blur', () => {
-            // Only allow name changes if game hasn't started
-            if (!hasGameStarted()) {
-                saveCurrentGameState();
-                // Update the original name to the new value for future reverts
-                nameInput.setAttribute('data-original-name', nameInput.value);
-            } else {
-                // Revert to original name if game has started
-                const originalName = nameInput.getAttribute('data-original-name');
-                if (originalName) {
-                    nameInput.value = originalName;
-                }
-                alert('Cannot change player names after the game has started!');
+    
+    // Add event listener to save game state when name changes
+    nameInput.addEventListener('blur', () => {
+        // Only allow name changes if game hasn't started
+        if (!hasGameStarted()) {
+            saveCurrentGameState();
+            // Update the original name to the new value for future reverts
+            nameInput.setAttribute('data-original-name', nameInput.value);
+        } else {
+            // Revert to original name if game has started
+            const originalName = nameInput.getAttribute('data-original-name');
+            if (originalName) {
+                nameInput.value = originalName;
             }
-        });
-        nameInput.addEventListener('keypress', (event) => {
-            if (event.key === 'Enter') {
-                event.preventDefault();
-                nameInput.blur();
-            }
-        });
-        // Store original name for potential revert
-        nameInput.setAttribute('data-original-name', playerName);
-    }
+            alert('Cannot change player names after the game has started!');
+        }
+    });
+    nameInput.addEventListener('keypress', (event) => {
+        if (event.key === 'Enter') {
+            event.preventDefault();
+            nameInput.blur();
+        }
+    });
+    // Store original name for potential revert
+    nameInput.setAttribute('data-original-name', playerName);
+    
     return nameInput;
 }
 
@@ -112,24 +100,24 @@ function createRemoveButton(playerHeader) {
 function createSimpleWrapper(nameInput, playerHeader) {
     const wrapper = document.createElement('div');
     wrapper.className = 'player-wrapper';
-    
-    if (!nameInput.disabled) {
-        wrapper.appendChild(createRemoveButton(playerHeader));
-    }
-    
+    wrapper.appendChild(createRemoveButton(playerHeader));
     wrapper.appendChild(nameInput);
     return wrapper;
 }
 
-
-
-
+/**
+ * Adds a player header to the table.
+ *
+ * @param {string} playerName - The name of the player.
+ * @param {boolean} mainPlayer - Whether this player is the main player (cannot be removed).
+ */
 function addPlayerHeader(playerName, mainPlayer = false) {
     const playerRow = document.getElementById('player-row');
     const playerHeader = document.createElement('th');
 
-    const nameInput = createNameInput(playerName, mainPlayer);
+    const nameInput = createNameInput(playerName);
 
+    // Main player doesn't get a remove button, but can still edit their name
     if (!mainPlayer) {
         playerHeader.appendChild(createSimpleWrapper(nameInput, playerHeader));
     } else {
@@ -139,9 +127,6 @@ function addPlayerHeader(playerName, mainPlayer = false) {
     playerHeader.setAttribute('data-main-player', mainPlayer.toString());
     playerRow.appendChild(playerHeader);
 }
-
-
-
 
 
 /**
@@ -172,7 +157,6 @@ export function removePlayer(playerHeader) {
 
     saveCurrentGameState();
 }
-
 
 /**
  * Disables the "Add Player" button.
