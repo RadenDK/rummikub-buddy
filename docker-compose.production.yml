@@ -1,0 +1,22 @@
+services:
+  rummikub-buddy:
+    image: ghcr.io/radendk/rummikub-buddy:latest
+    container_name: rummikub-buddy
+    restart: unless-stopped
+    labels:
+      - "com.centurylinklabs.watchtower.enable=true"
+    networks:
+      - publicvm_web
+    expose:
+      - "80"
+    environment:
+      - APP_NAME=RummikubBuddy
+      - APP_ENV=production
+      - APP_DEBUG=false
+      - APP_KEY=base64:It21/DjspV2bjg/vgg7Tp4eXy2e60m9EObW324enL+M=
+      - APP_URL=https://rummikub.rasmusjensen.com
+      - SESSION_DRIVER=file
+
+networks:
+  publicvm_web:
+    external: true
