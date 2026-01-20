@@ -1,6 +1,10 @@
 # Use the smallest possible PHP + Apache image
 FROM php:8.2-apache
 
+# Accept build arguments
+ARG APP_KEY
+ENV APP_KEY=${APP_KEY}
+
 # Install essential dependencies for MySQL extensions and unzip
 RUN apt-get update && apt-get install -y \
     unzip \
