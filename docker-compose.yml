@@ -1,12 +1,9 @@
 services:
-  laravel-client:
+  vue-client:
     container_name: rummikub-buddy-client
     build:
-      context: ./laravel-client
+      context: ./vue-client
       dockerfile: Dockerfile
-    user: "1000:1000"
-    volumes:
-      - ./laravel-client:/var/www/html
     networks:
       - dev-env-network
     ports:
