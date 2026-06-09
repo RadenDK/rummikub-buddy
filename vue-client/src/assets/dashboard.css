@@ -6,24 +6,25 @@
 }
 
 body {
-    font-family: 'Roboto', Arial, sans-serif;
-    background-color: #faf7f2;
+    font-family: 'Nunito', 'Trebuchet MS', Arial, sans-serif;
+    background-color: #f4f0ea;
     color: #2d2a26;
     line-height: 1.6;
-    padding: 15px;
+    padding: 16px;
     max-width: 100vw;
     overflow-x: hidden;
     -webkit-text-size-adjust: 100%;
+    font-size: 16px;
 }
 
 /* App title */
 .app-title {
     text-align: center;
-    font-size: 24px;
-    font-weight: 700;
+    font-size: 28px;
+    font-weight: 800;
     color: #1a535c;
-    margin-bottom: 5px;
-    letter-spacing: 0.5px;
+    margin-bottom: 6px;
+    letter-spacing: 0.3px;
 }
 
 /* Dashboard Container */
@@ -32,40 +33,40 @@ body {
     flex-direction: column;
     max-width: 1200px;
     margin: 0 auto;
-    padding: 10px;
-    gap: 20px;
+    padding: 16px;
+    gap: 16px;
     background-color: #fff;
-    border-radius: 10px;
-    box-shadow: 0 2px 12px rgba(26, 83, 92, 0.08);
+    border-radius: 16px;
+    box-shadow: 0 2px 20px rgba(26, 83, 92, 0.10);
 }
 
 /* Players container and table */
 .players-container {
     overflow-x: auto;
     overflow-y: auto;
-    margin-bottom: 20px;
     max-height: 70vh;
     max-height: 70lvh;
+    border: 1px solid #ddd9d3;
+    border-radius: 10px;
 }
 
 #score-table {
     width: 100%;
     border-collapse: collapse;
-    margin-bottom: 20px;
     table-layout: fixed;
 }
 
 #score-table th,
 #score-table td {
     text-align: center;
-    padding: 12px 8px;
+    padding: 14px 10px;
     border: 1px solid #e0ddd8;
 }
 
 #score-table thead th {
     background-color: #1a535c;
     color: #f0ece6;
-    font-weight: 600;
+    font-weight: 700;
     position: sticky;
     top: 0;
     z-index: 10;
@@ -73,6 +74,13 @@ body {
 
 #score-table tr:nth-child(even) {
     background-color: #faf7f2;
+}
+
+/* Subtle round number styling */
+#score-table tbody td:first-child {
+    color: #8a8078;
+    font-size: 0.88em;
+    font-weight: 600;
 }
 
 #totals-row {
@@ -92,30 +100,33 @@ body {
     background: transparent;
     text-align: center;
     font-size: inherit;
+    font-family: inherit;
     font-weight: inherit;
     color: inherit;
     padding: 4px 2px;
-    min-height: 44px;
+    min-height: 48px;
     -webkit-appearance: none;
     -moz-appearance: textfield;
     outline: none;
     cursor: text;
+    border-radius: 6px;
+    transition: background-color 0.12s ease;
 }
 
 .score-input::placeholder {
-    color: #b8b2a8;
+    color: #c0bab0;
     font-style: italic;
     font-weight: 400;
 }
 
 .score-input:focus {
-    background-color: #e8f0ee;
-    outline: 2px solid #1a535c;
+    background-color: #deeeed;
+    outline: 2.5px solid #1a535c;
     outline-offset: -2px;
-    border-radius: 2px;
+    border-radius: 6px;
 }
 
-/* Empty score cell affordance — dashed border hint */
+/* Empty score cell affordance */
 .score-cell--empty {
     background-color: #fdf9f3;
     cursor: pointer;
@@ -127,7 +138,8 @@ body {
 
 /* Active (incomplete) row highlight */
 .score-row--active td {
-    background-color: #fef9e7;
+    background-color: #fffbef;
+    border-top: 2px solid #d4a843;
     border-bottom: 2px solid #d4a843;
 }
 
@@ -139,13 +151,14 @@ body {
 /* Winner score display */
 .winner-score {
     display: block;
-    min-height: 44px;
-    line-height: 44px;
+    min-height: 48px;
+    line-height: 48px;
+    font-weight: 700;
 }
 
-/* Winner and loser cell styles - using specificity instead of !important */
+/* Winner and loser cell styles */
 #score-table td.winner-cell {
-    background-color: #d6ede0;
+    background-color: #c8e8d4;
     color: #1b6d3e;
     font-weight: bold;
 }
@@ -158,60 +171,66 @@ body {
 /* Buttons */
 .add-btn, .finish-btn {
     border: none;
-    border-radius: 8px;
-    padding: 10px 15px;
+    border-radius: 10px;
+    padding: 12px 16px;
     font-size: 16px;
+    font-family: inherit;
+    font-weight: 700;
     cursor: pointer;
-    transition: all 0.2s ease;
+    transition: all 0.15s ease;
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    margin: 5px 0;
-    font-weight: 600;
-    min-height: 44px;
+    margin: 4px 0;
+    min-height: 48px;
+    -webkit-tap-highlight-color: transparent;
 }
 
 #add-player-btn {
     background: transparent;
     border: 2px dashed rgba(240, 236, 230, 0.5);
     color: #f0ece6;
-    width: 40px;
-    height: 40px;
+    width: 44px;
+    height: 44px;
     border-radius: 8px;
     padding: 0;
     line-height: 1;
     font-size: 22px;
+    font-family: inherit;
     cursor: pointer;
-    transition: all 0.2s ease;
+    transition: all 0.15s ease;
+    -webkit-tap-highlight-color: transparent;
 }
 
 .add-player-col {
-    width: 50px;
-    min-width: 50px;
+    width: 54px;
+    min-width: 54px;
 }
 
 #add-round-btn {
     background-color: #d4a843;
     color: #2d2a26;
     width: 100%;
-    max-width: 260px;
+    max-width: 280px;
     margin: 0 auto;
     display: block;
-    font-size: 17px;
-    padding: 12px 20px;
-    border-radius: 10px;
-    box-shadow: 0 2px 8px rgba(212, 168, 67, 0.3);
+    font-size: 18px;
+    font-weight: 700;
+    padding: 14px 20px;
+    border-radius: 12px;
+    box-shadow: 0 3px 10px rgba(212, 168, 67, 0.35);
+    letter-spacing: 0.2px;
 }
 
 #new-game-btn {
     background-color: transparent;
     color: #8b5e3c;
-    border: 1px solid #c4b8a8;
+    border: 1.5px solid #c4b8a8;
     width: 100%;
     max-width: 200px;
     margin: 0 auto;
     display: block;
-    font-weight: 500;
+    font-weight: 600;
 }
 
 /* Hover effects only for devices that support hover */
@@ -230,7 +249,8 @@ body {
 
     #add-round-btn:hover {
         background-color: #c99a38;
-        box-shadow: 0 4px 14px rgba(212, 168, 67, 0.4);
+        box-shadow: 0 5px 16px rgba(212, 168, 67, 0.45);
+        transform: translateY(-1px);
     }
 
     #new-game-btn:hover {
@@ -245,7 +265,7 @@ body {
 
     .remove-btn:hover {
         background: rgba(180, 60, 50, 1);
-        transform: scale(1.1);
+        transform: scale(1.05);
     }
 
     .score-cell--empty:hover {
@@ -255,16 +275,17 @@ body {
 
 /* Active states for touch devices */
 .add-btn:active, .finish-btn:active {
-    transform: translateY(0);
-    opacity: 0.8;
+    transform: translateY(1px);
+    opacity: 0.85;
+    box-shadow: none;
 }
 
 .add-btn.disabled,
 .add-btn:disabled {
-    background-color: #c4b8a8;
-    color: #8a8078;
+    background-color: #d0cab8;
+    color: #9a9290;
     cursor: not-allowed;
-    opacity: 0.6;
+    opacity: 0.65;
     transform: none;
     box-shadow: none;
 }
@@ -276,18 +297,20 @@ body {
     background: rgba(240, 236, 230, 0.2);
     text-align: center;
     font-size: inherit;
+    font-family: inherit;
     font-weight: inherit;
     color: inherit;
-    padding: 5px;
-    min-height: 44px;
-    transition: all 0.3s ease;
+    padding: 6px;
+    min-height: 48px;
+    border-radius: 6px;
+    transition: all 0.2s ease;
 }
 
 .player-name-input:focus {
     outline: none;
-    border-color: rgba(240, 236, 230, 0.8);
+    border-color: rgba(240, 236, 230, 0.9);
     background: rgba(240, 236, 230, 0.4);
-    box-shadow: 0 0 5px rgba(240, 236, 230, 0.3);
+    box-shadow: 0 0 6px rgba(240, 236, 230, 0.3);
 }
 
 /* Player wrapper styling */
@@ -296,7 +319,7 @@ body {
     align-items: center;
     justify-content: center;
     width: 100%;
-    gap: 5px;
+    gap: 4px;
 }
 
 .remove-btn {
@@ -305,58 +328,138 @@ body {
     color: white;
     cursor: pointer;
     font-size: 16px;
-    padding: 2px 8px;
-    border-radius: 3px;
-    font-weight: bold;
-    transition: all 0.2s ease;
+    font-family: inherit;
+    font-weight: 700;
+    padding: 0;
+    border-radius: 6px;
+    transition: all 0.15s ease;
     flex-shrink: 0;
     min-height: 44px;
     min-width: 44px;
+    -webkit-tap-highlight-color: transparent;
+}
+
+/* === Modal === */
+.modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(26, 83, 92, 0.5);
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 100;
+    padding: 24px;
+}
+
+.modal {
+    background: #fff;
+    border-radius: 20px;
+    padding: 32px 28px;
+    max-width: 340px;
+    width: 100%;
+    box-shadow: 0 20px 60px rgba(26, 83, 92, 0.25);
+    text-align: center;
+}
+
+.modal-title {
+    font-size: 22px;
+    font-weight: 800;
+    color: #1a535c;
+    margin-bottom: 10px;
+}
+
+.modal-text {
+    font-size: 16px;
+    color: #6b6460;
+    margin-bottom: 24px;
+}
+
+.modal-buttons {
+    display: flex;
+    gap: 12px;
+    justify-content: center;
+}
+
+.modal-btn {
+    border: none;
+    border-radius: 10px;
+    padding: 12px 22px;
+    font-size: 16px;
+    font-family: inherit;
+    font-weight: 700;
+    cursor: pointer;
+    min-height: 48px;
+    min-width: 120px;
+    transition: all 0.15s ease;
+    -webkit-tap-highlight-color: transparent;
+}
+
+.modal-btn--cancel {
+    background-color: #ede8e0;
+    color: #6b6460;
+}
+
+.modal-btn--confirm {
+    background-color: #c0392b;
+    color: #fff;
+    box-shadow: 0 3px 10px rgba(192, 57, 43, 0.3);
 }
 
 /* iPad media query (768px-1024px) */
 @media screen and (min-width: 768px) and (max-width: 1024px) {
+    body {
+        font-size: 17px;
+    }
+
     #score-table th,
     #score-table td {
-        padding: 12px 8px;
-        font-size: 18px;
+        padding: 14px 10px;
+        font-size: 17px;
     }
 
     .score-input {
-        min-height: 48px;
-        font-size: 18px;
+        min-height: 52px;
+        font-size: 17px;
     }
 
     .winner-score {
-        min-height: 48px;
-        line-height: 48px;
-        font-size: 18px;
+        min-height: 52px;
+        line-height: 52px;
+        font-size: 17px;
     }
 
     .player-name-input {
-        min-height: 48px;
-        font-size: 18px;
+        min-height: 52px;
+        font-size: 17px;
     }
 
     .add-btn, .finish-btn {
-        min-height: 48px;
-        font-size: 18px;
+        min-height: 52px;
+        font-size: 17px;
     }
 
     .remove-btn {
-        min-height: 48px;
-        min-width: 48px;
+        min-height: 52px;
+        min-width: 52px;
+    }
+
+    #add-round-btn {
+        font-size: 19px;
+        padding: 16px 24px;
+        max-width: 320px;
     }
 }
 
 /* Mobile media queries */
-@media screen and (max-width: 768px) {
+@media screen and (max-width: 767px) {
     body {
-        padding: 10px 5px;
+        padding: 10px 6px;
     }
 
     .dashboard-container {
-        padding: 10px 5px;
+        padding: 12px 8px;
     }
 
     #score-table th,
@@ -366,8 +469,8 @@ body {
     }
 
     .add-btn, .finish-btn {
-        padding: 8px 12px;
-        font-size: 14px;
+        padding: 10px 14px;
+        font-size: 15px;
     }
 }
 

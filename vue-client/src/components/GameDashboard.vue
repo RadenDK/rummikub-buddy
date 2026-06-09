@@ -59,12 +59,27 @@
     <button
       id="new-game-btn"
       class="add-btn"
-      @click="onNewGame"
+      @click="showNewGameModal = true"
     >Nyt spil</button>
+
+    <!-- New Game Confirmation Modal -->
+    <Teleport to="body">
+      <div v-if="showNewGameModal" class="modal-overlay" @click.self="showNewGameModal = false">
+        <div class="modal">
+          <h2 class="modal-title">Nyt spil?</h2>
+          <p class="modal-text">Al fremgang vil blive slettet.</p>
+          <div class="modal-buttons">
+            <button class="modal-btn modal-btn--cancel" @click="showNewGameModal = false">Annuller</button>
+            <button class="modal-btn modal-btn--confirm" @click="confirmNewGame">Ja, nyt spil</button>
+          </div>
+        </div>
+      </div>
+    </Teleport>
   </div>
 </template>
 
 <script setup>
+import { ref } from 'vue'
 import PlayerHeader from './PlayerHeader.vue'
 import ScoreRow from './ScoreRow.vue'
 import { useGameState } from '../composables/useGameState.js'
@@ -84,9 +99,10 @@ const {
 
 const { roundResults, columnTotals, readyForNewRound } = useScoreCalculation(state)
 
-function onNewGame() {
-  if (confirm('Are you sure you want to start a new game? This will clear all current progress.')) {
-    startNewGame()
-  }
+const showNewGameModal = ref(false)
+
+function confirmNewGame() {
+  startNewGame()
+  showNewGameModal.value = false
 }
 </script>
