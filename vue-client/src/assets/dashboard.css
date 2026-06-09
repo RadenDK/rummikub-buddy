@@ -42,8 +42,10 @@ body {
 /* Players container and table */
 .players-container {
     overflow-x: auto;
+    overflow-y: auto;
     margin-bottom: 20px;
     max-height: 70vh;
+    max-height: 70lvh;
 }
 
 #score-table {
