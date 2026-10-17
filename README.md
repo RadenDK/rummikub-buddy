@@ -6,5 +6,5 @@ I used it as an opportunity to learn Laravel and experiment with features like s
 
 The app stores user emails and associates players and games with their profile. It's tailored to a very specific use case, but it was a fun way to learn and build something useful at the same time.
 
-You can try it out here: [https://rummikubbuddy.rasmusjensen.tech/login](https://rummikubbuddy.rasmusjensen.tech/login)  
+You can try it out here: [https://rummikub.rasmusjensen.com/](https://rummikub.rasmusjensen.com/)  
 (If it's still running!)
